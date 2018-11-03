@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+group = 'nu.mine.mosher.gedcom'
+version = '1.0.0-SNAPSHOT'
+mainClassName = 'nu.mine.mosher.gedcom.GedcomToXml'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://mosher.mine.nu/nexus/repository/maven-public/'
+    }
+}
+
+dependencies {
+    implementation group: 'nu.mine.mosher.gedcom', name: 'gedcom-lib', version: 'latest.integration'
+    implementation group: 'nu.mine.mosher.mopper', name: 'mopper', version: 'latest.integration'
+    implementation group: 'org.owasp.encoder', name: 'encoder', version: 'latest.release'
+}
