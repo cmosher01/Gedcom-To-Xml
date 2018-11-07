@@ -1,3 +1,24 @@
+/*
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    Copyright © 2018, by Christopher Alan Mosher, Shelton, Connecticut, USA.
+
+    <https://mosher.mine.nu/>
+
+ */
+
 package nu.mine.mosher.gedcom;
 
 public class GedcomToXmlOptions extends GedcomOptions {
@@ -5,6 +26,7 @@ public class GedcomToXmlOptions extends GedcomOptions {
     public int charsMin = 60;
     public boolean pretty = false;
     public boolean escape = false;
+    public boolean nodes = false;
 
     public void help() {
         this.help = true;
@@ -15,6 +37,7 @@ public class GedcomToXmlOptions extends GedcomOptions {
         System.err.println("-m, --min=chars      minimun characters to write as value");
         System.err.println("-p, --pretty         add some whitespace for prettier output");
         System.err.println("-x, --escape         escape values rather than wrapping in CDATA");
+        System.err.println("-n, --nodes          nodes-only mode");
         options();
     }
 
@@ -48,6 +71,14 @@ public class GedcomToXmlOptions extends GedcomOptions {
 
     public void escape() {
         this.escape = true;
+    }
+
+    public void n() {
+        nodes();
+    }
+
+    public void nodes() {
+        this.nodes = true;
     }
 
     public GedcomToXmlOptions verify() {
