@@ -35,6 +35,8 @@ import static nu.mine.mosher.logging.Jul.log;
 // Created by Christopher Alan Mosher on 2018-11-03.
 
 public class GedcomToXml implements Gedcom.Processor {
+    public static final String DTD_FPI = "+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN";
+    public static final String DTD_URL = "https://mosher.mine.nu/dtd/gedcom/nodes.dtd";
     private final GedcomToXmlOptions options;
     private final BufferedWriter out;
     private final BufferedReader in;
@@ -66,11 +68,12 @@ public class GedcomToXml implements Gedcom.Processor {
         try {
             outHead();
             outDoctype();
-            this.out.write("<gedcom:nodes xmlns:gedcom=\"http://mosher.mine.nu/xmlns/gedcom\">");
+            this.out.write("<gedcom:nodes xmlns:gedcom=\"https://mosher.mine.nu/xmlns/gedcom\">");
 
             final LevelLineReader r = new LevelLineReader(this.in);
+            int lineNumber = 1;
             for (final LevelLineReader.LevelLine line : r) {
-                processLine(line);
+                processLine(line, lineNumber++);
             }
             finish();
 
@@ -87,13 +90,7 @@ public class GedcomToXml implements Gedcom.Processor {
     }
 
     private void outDoctype() throws IOException {
-        this.out.write("" +
-                "<!DOCTYPE gedcom:nodes [\n" +
-                "  <!ELEMENT gedcom:nodes (gedcom:node*)>\n" +
-                "<!ATTLIST gedcom:nodes xmlns:gedcom CDATA #FIXED \"http://mosher.mine.nu/xmlns/gedcom\">\n" +
-                "  <!ELEMENT gedcom:node (gedcom:value?,gedcom:node*)>\n" +
-                "  <!ELEMENT gedcom:value (#PCDATA)>\n" +
-                "]>\n");
+        this.out.write(String.format("<!DOCTYPE gedcom:nodes PUBLIC \"%s\" \"%s\">", DTD_FPI, DTD_URL));
     }
 
     private void finish() throws IOException {
@@ -103,22 +100,23 @@ public class GedcomToXml implements Gedcom.Processor {
         }
     }
 
-    private void processLine(final LevelLineReader.LevelLine line) throws IOException {
+    private void processLine(final LevelLineReader.LevelLine line, int lineNumber) throws IOException {
         final int pop = this.p + 1 - line.level;
         if (pop < 0) {
-//            throw new IllegalStateException("invalid level "+line.level+" (p="+this.p+")"); // TODO: error recovery
             for (int i = 0; i < this.p+1; ++i) {
                 this.out.write("</gedcom:node>");
             }
             for (int i = 0; i < line.level; ++i) {
-                this.out.write("<gedcom:node>");
+                this.out.write("<gedcom:node gedcom:line-number=\""+lineNumber+"\">");
+                this.out.write("<gedcom:value/>");
+            }
+        } else {
+            for (int i = 0; i < pop; ++i) {
+                this.out.write("</gedcom:node>");
             }
         }
-        for (int i = 0; i < pop; ++i) {
-            this.out.write("</gedcom:node>");
-        }
         this.p = line.level;
-        this.out.write("<gedcom:node>");
+        this.out.write("<gedcom:node gedcom:line-number=\""+lineNumber+"\">");
         this.out.write("<gedcom:value>");
         this.out.write(cdata(line.value));
         this.out.write("</gedcom:value>");
@@ -155,7 +153,7 @@ public class GedcomToXml implements Gedcom.Processor {
 
     private void outHead() throws IOException {
         if (!this.options.fragment) {
-            this.out.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
+            this.out.write("<?xml version=\"1.1\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
         }
     }
 
@@ -172,7 +170,7 @@ public class GedcomToXml implements Gedcom.Processor {
         indent(indent);
         this.out.write("<" + tag(line));
         if (Objects.isNull(line)) {
-            this.out.write(" xmlns:gedcom=\"http://mosher.mine.nu/xmlns/gedcom\"");
+            this.out.write(" xmlns:gedcom=\"https://mosher.mine.nu/xmlns/gedcom\"");
             this.out.write(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
         } else {
             if (line.hasID()) {
