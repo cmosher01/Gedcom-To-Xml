@@ -18,19 +18,22 @@
 
 
 
+    <xsl:key name="mapIds" match="gedcom:id" use="@gedcom:id"/>
+
+    <xsl:template match="bibref">
+    </xsl:template>
+
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="gedcom:value">
+    <xsl:template match="gedcom:value[@gedcom:id]">
         <xsl:copy>
-            <xsl:if test="fn:count(@gedcom:id) != 0 and fn:string-length(gedcom:validId(@gedcom:id)) = 0">
-                <xsl:attribute name="gedcom-id-type">
-                    <xsl:value-of select="'invalid'"/>
-                </xsl:attribute>
-            </xsl:if>
+            <xsl:attribute name="xml:id">
+                <xsl:apply-templates select="key('mapIds', @xml:id, fn:doc('../../../../e3.id.xml'))"/>
+            </xsl:attribute>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>

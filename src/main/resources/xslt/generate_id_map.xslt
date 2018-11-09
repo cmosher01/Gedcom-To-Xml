@@ -18,12 +18,12 @@
         </xsl:element>
     </xsl:template>
     <xsl:template match="gedcom:value">
-        <xsl:if test="fn:count(@gedcom:id) > 0">
+        <xsl:if test="fn:count(@gedcom:id) != 0">
             <xsl:element name="gedcom:id">
                 <xsl:attribute name="gedcom:id">
                     <xsl:value-of select="@gedcom:id"/>
                 </xsl:attribute>
-                <xsl:attribute name="gedcom:mapped-id">
+                <xsl:attribute name="xml:id">
                     <xsl:value-of select="fn:generate-id()"/>
                 </xsl:attribute>
             </xsl:element>
