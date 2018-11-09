@@ -32,7 +32,7 @@
     <xsl:template match="gedcom:value[@gedcom:id]">
         <xsl:copy>
             <xsl:attribute name="xml:id">
-                <xsl:apply-templates select="key('mapIds', @xml:id, fn:doc('../../../../e3.id.xml'))"/>
+                <xsl:value-of select="fn:key('mapIds', @gedcom:id, fn:doc('../../../../e3.id.xml'))/@xml:id"/>
             </xsl:attribute>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>

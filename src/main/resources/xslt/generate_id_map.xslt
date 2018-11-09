@@ -11,6 +11,8 @@
         omit-xml-declaration="no"
         encoding="UTF-8"
         standalone="no"
+        doctype-public="+//IDN mosher.mine.nu//DTD gedcom ids 1.0//EN"
+        doctype-system="https://mosher.mine.nu/dtd/gedcom/ids.dtd"
     />
     <xsl:template match="gedcom:nodes">
         <xsl:element name="gedcom:ids">
