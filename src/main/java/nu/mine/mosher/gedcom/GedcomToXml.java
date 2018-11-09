@@ -27,6 +27,7 @@ import nu.mine.mosher.mopper.ArgParser;
 import org.owasp.encoder.Encode;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -44,6 +45,7 @@ public class GedcomToXml implements Gedcom.Processor {
 
     public static void main(final String... args) throws InvalidLevel, IOException {
         log();
+
         final GedcomToXmlOptions options = new ArgParser<>(new GedcomToXmlOptions()).parse(args).verify();
         final GedcomToXml gedcomToXml = new GedcomToXml(options);
         if (options.nodes) {
@@ -103,6 +105,7 @@ public class GedcomToXml implements Gedcom.Processor {
     private void processLine(final LevelLineReader.LevelLine line, int lineNumber) throws IOException {
         final int pop = this.p + 1 - line.level;
         if (pop < 0) {
+            log().warning("Illegal level found at line "+lineNumber+". Generating nodes (without tags) to compensate.");
             for (int i = 0; i < this.p+1; ++i) {
                 this.out.write("</gedcom:node>");
             }
@@ -124,9 +127,10 @@ public class GedcomToXml implements Gedcom.Processor {
 
     private GedcomToXml(final GedcomToXmlOptions options) {
         this.options = options;
+        final Charset csGedcom = (Objects.nonNull(options.encoding)) ? options.encoding : StandardCharsets.UTF_8;
         this.out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileDescriptor.out), StandardCharsets.UTF_8));
         if (this.options.nodes) {
-            this.in = new BufferedReader(new InputStreamReader(new FileInputStream(FileDescriptor.in), StandardCharsets.UTF_8));
+            this.in = new BufferedReader(new InputStreamReader(new FileInputStream(FileDescriptor.in), csGedcom));
         } else {
             this.in = null;
         }
