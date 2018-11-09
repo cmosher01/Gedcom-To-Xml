@@ -70,7 +70,7 @@ public class GedcomToXml implements Gedcom.Processor {
         try {
             outHead();
             outDoctype();
-            this.out.write("<gedcom:nodes xmlns:gedcom=\"https://mosher.mine.nu/xmlns/gedcom\">");
+            this.out.write("<gedcom:nodes xmlns:gedcom=\"https://mosher.mine.nu/xmlns/gedcom\">\n");
 
             final LevelLineReader r = new LevelLineReader(this.in);
             int lineNumber = 1;
@@ -79,7 +79,7 @@ public class GedcomToXml implements Gedcom.Processor {
             }
             finish();
 
-            this.out.write("</gedcom:nodes>");
+            this.out.write("</gedcom:nodes>\n");
             this.out.flush();
             this.in.close();
         } finally {
@@ -92,37 +92,38 @@ public class GedcomToXml implements Gedcom.Processor {
     }
 
     private void outDoctype() throws IOException {
-        this.out.write(String.format("<!DOCTYPE gedcom:nodes PUBLIC \"%s\" \"%s\">", DTD_FPI, DTD_URL));
+        this.out.write(String.format("<!DOCTYPE gedcom:nodes PUBLIC \"%s\" \"%s\">\n", DTD_FPI, DTD_URL));
     }
 
     private void finish() throws IOException {
         final int pop = this.p + 1;
         for (int i = 0; i < pop; ++i) {
-            this.out.write("</gedcom:node>");
+            log().warning("Adding closing gedcom:node at the end.");
+            this.out.write("</gedcom:node>\n");
         }
     }
 
     private void processLine(final LevelLineReader.LevelLine line, int lineNumber) throws IOException {
         final int pop = this.p + 1 - line.level;
         if (pop < 0) {
-            log().warning("Illegal level found at line "+lineNumber+". Generating nodes (without tags) to compensate.");
+            log().warning(String.format("Illegal level (%d) found at line %d. Generating nodes (without tags) to compensate.", line.level, lineNumber));
             for (int i = 0; i < this.p+1; ++i) {
-                this.out.write("</gedcom:node>");
+                this.out.write("</gedcom:node>\n");
             }
             for (int i = 0; i < line.level; ++i) {
-                this.out.write("<gedcom:node gedcom:line-number=\""+lineNumber+"\">");
-                this.out.write("<gedcom:value/>");
+                this.out.write("<gedcom:node gedcom:line-number=\""+lineNumber+"\">\n");
+                this.out.write("<gedcom:value/>\n");
             }
         } else {
             for (int i = 0; i < pop; ++i) {
-                this.out.write("</gedcom:node>");
+                this.out.write("</gedcom:node>\n");
             }
         }
         this.p = line.level;
-        this.out.write("<gedcom:node gedcom:line-number=\""+lineNumber+"\">");
+        this.out.write("<gedcom:node gedcom:line-number=\""+lineNumber+"\">\n");
         this.out.write("<gedcom:value>");
         this.out.write(cdata(line.value));
-        this.out.write("</gedcom:value>");
+        this.out.write("</gedcom:value>\n");
     }
 
     private GedcomToXml(final GedcomToXmlOptions options) {

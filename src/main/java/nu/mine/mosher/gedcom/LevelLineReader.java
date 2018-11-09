@@ -24,8 +24,8 @@ public class LevelLineReader implements Iterable<LevelLineReader.LevelLine> {
         public LevelLine(final int level, final String value) {
             this.level = level;
             this.value = value;
-            if (this.level < -1 || 100 <= this.level) {
-                throw new IllegalStateException("Invalid level number: "+this.level+" (must be less than 100)");
+            if (this.level < -1 || 1000 <= this.level) {
+                throw new IllegalStateException("Invalid level number: "+this.level+" (must be less than 1000)");
             }
         }
 
