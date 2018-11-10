@@ -34,6 +34,7 @@
 
             <xsl:element name="gedcom:value">
                 <xsl:apply-templates select="gedcom:value/@*"/>
+                <xsl:value-of select="gedcom:value/node()"/>
                 <xsl:iterate select="gedcom:node[./gedcom:value/@gedcom:tag='CONC' or ./gedcom:value/@gedcom:tag='CONT']">
                     <xsl:if test="./gedcom:value/@gedcom:tag='CONT'">
                         <xsl:value-of select="'&#x0A;'"/>
@@ -42,7 +43,7 @@
                 </xsl:iterate>
             </xsl:element>
 
-            <xsl:apply-templates select="node()[not(./gedcom:value/@gedcom:tag='CONC' or ./gedcom:value/@gedcom:tag='CONT')]"/>
+            <xsl:apply-templates select="gedcom:node[not(./gedcom:value/@gedcom:tag='CONC' or ./gedcom:value/@gedcom:tag='CONT')]"/>
         </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>
