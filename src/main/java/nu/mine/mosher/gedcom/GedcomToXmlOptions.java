@@ -21,70 +21,32 @@
 
 package nu.mine.mosher.gedcom;
 
-public class GedcomToXmlOptions extends GedcomOptions {
-    public boolean fragment = false;
-    public int charsMin = 60;
-    public boolean pretty = false;
-    public boolean escape = false;
-    public boolean nodes = false;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+class GedcomToXmlOptions {
+    public Charset encoding = StandardCharsets.UTF_8;
 
     public void help() {
-        this.help = true;
-        System.err.println("Usage: gedcom-to-xml [OPTIONS] <in.ged >out.xml");
-        System.err.println("Converts GEDCOM to XML.");
-        System.err.println("Options:");
-        System.err.println("-f, --fragment       output as XML fragment (no header)");
-        System.err.println("-m, --min=chars      minimun characters to write as value");
-        System.err.println("-p, --pretty         add some whitespace for prettier output");
-        System.err.println("-x, --escape         escape values rather than wrapping in CDATA");
-        System.err.println("-n, --nodes          nodes-only mode");
-        options();
+        System.out.println("Usage: gedcom-to-xml [OPTIONS] <in.ged >out.xml");
+        System.out.println("Converts GEDCOM to XML. Does only minimal processing or parsing.");
+        System.out.println("Options:");
+        String s = String.join("\n",
+            "",
+            "-h, --help          Print this help",
+            "-e, --encoding=ENC  Character encoding of GEDCOM file (default: UTF-8)"
+        );
     }
 
-    public void f() {
-        fragment();
+    public void h() {
+        help();
     }
 
-    public void fragment() {
-        this.fragment = true;
+    public void encoding(final String encoding) {
+        this.encoding = Charset.forName(encoding);
     }
 
-    public void m(final String n) {
-        min(n);
-    }
-
-    public void min(final String n) {
-        this.charsMin = Integer.parseInt(n);
-    }
-
-    public void p() {
-        pretty();
-    }
-
-    public void pretty() {
-        this.pretty = true;
-    }
-
-    public void x() {
-        escape();
-    }
-
-    public void escape() {
-        this.escape = true;
-    }
-
-    public void n() {
-        nodes();
-    }
-
-    public void nodes() {
-        this.nodes = true;
-    }
-
-    public GedcomToXmlOptions verify() {
-        if (this.help) {
-            return this;
-        }
-        return this;
+    public void e(final String encoding) {
+        encoding(encoding);
     }
 }

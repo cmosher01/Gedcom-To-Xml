@@ -5,7 +5,7 @@ sax99="java -cp /opt/saxon/current/saxon9he.jar"
 sax="$sax98"
 
 # GEDCOM to XML (raw nodes only)
-./gedcom-to-xml-1.0.0-SNAPSHOT/bin/gedcom-to-xml -n -e UTF-8 -v >e1.xml
+./gedcom-to-xml-1.0.0-SNAPSHOT/bin/gedcom-to-xml >e1.xml
 
 # parse nodes to id/tag/value/pointer
 $sax net.sf.saxon.Transform -xmlversion:1.1 -dtd:on -xsl:src/main/resources/xslt/parse_raw_nodes.xslt -s:e1.xml >e2.xml

@@ -21,16 +21,17 @@ public class LevelLineReader implements Iterable<LevelLineReader.LevelLine> {
     public static class LevelLine {
         public final int level;
         public final String value;
+
         public LevelLine(final int level, final String value) {
             this.level = level;
             this.value = value;
             if (this.level < -1 || 1000 <= this.level) {
-                throw new IllegalStateException("Invalid level number: "+this.level+" (must be less than 1000)");
+                throw new IllegalStateException("Invalid level number: " + this.level + " (must be less than 1000)");
             }
         }
 
         public static LevelLine of(final String line) {
-            if (line == null) {
+            if (Objects.isNull(line)) {
                 return new LevelLine(-1, null);
             }
             final Matcher matcher = MissingLevelReader.PATTERN_LINE.matcher(line);
@@ -55,7 +56,7 @@ public class LevelLineReader implements Iterable<LevelLineReader.LevelLine> {
 
         @Override
         public boolean hasNext() {
-            return this.lineNext.value != null;
+            return Objects.nonNull(this.lineNext.value);
         }
 
         @Override
@@ -66,20 +67,19 @@ public class LevelLineReader implements Iterable<LevelLineReader.LevelLine> {
             return returned;
         }
 
-        @SuppressWarnings("synthetic-access")
         private void prepareNext() {
             this.lineNext = nextLine();
         }
 
         private void checkNext() throws NoSuchElementException {
-            if (this.lineNext.value == null) {
+            if (Objects.isNull(this.lineNext.value)) {
                 throw new NoSuchElementException();
             }
         }
     }
 
     private LevelLine nextLine() {
-        String line;
+        final String line;
         try {
             line = this.source.nextLeveledLine();
         } catch (final Exception e) {
