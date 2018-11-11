@@ -46,8 +46,10 @@
         <p:input port="parameters"/>
     </p:xslt>
 
-    <!-- TODO: verify_valid_ids.xslt -->
 <!--
+    TODO:
+
+    verify_valid_ids.xslt and set remap
 
     <p:xslt name="generate-id-map-or-remap">
         <p:input port="stylesheet">
@@ -55,6 +57,7 @@
         </p:input>
         <p:with-param name="remap" select="'false'"/>
     </p:xslt>
+
     <p:xslt name="generate-id-map-or-remap">
         <p:input port="stylesheet">
             <p:document href="xslt/remap_ids.xslt"/>
