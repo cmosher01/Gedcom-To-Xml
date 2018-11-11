@@ -46,25 +46,23 @@
         <p:input port="parameters"/>
     </p:xslt>
 
-<!--
-    TODO:
-
-    verify_valid_ids.xslt and set remap
-
     <p:xslt name="generate-id-map-or-remap">
         <p:input port="stylesheet">
-            <p:document href="xslt/generate_id_map.xslt"/>
+            <p:document href="xslt/gen_id_map2.xslt"/>
         </p:input>
-        <p:with-param name="remap" select="'false'"/>
+        <p:input port="parameters"/>
     </p:xslt>
 
-    <p:xslt name="generate-id-map-or-remap">
+    <p:xslt name="remap-ids">
         <p:input port="stylesheet">
-            <p:document href="xslt/remap_ids.xslt"/>
+            <p:document href="xslt/remap_ids2.xslt"/>
         </p:input>
-        <p:with-param name="idfile" select="???TODO???"/>
+        <p:input port="source">
+            <p:pipe step="parse-gedcom-lines" port="result"/>
+            <p:pipe step="generate-id-map-or-remap" port="result"/>
+        </p:input>
+        <p:input port="parameters"/>
     </p:xslt>
- -->
 
     <p:xslt name="process-cont-conc-lines">
         <p:input port="stylesheet">
