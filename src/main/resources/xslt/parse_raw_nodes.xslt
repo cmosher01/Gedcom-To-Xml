@@ -1,8 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <xsl:stylesheet
     version="3.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    xmlns:lines="https://mosher.mine.nu/xmlns/lines"
+    xmlns:hier="https://mosher.mine.nu/xmlns/hier"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
 >
     <xsl:output
@@ -10,6 +13,7 @@
         version="1.1"
         omit-xml-declaration="no"
         encoding="UTF-8"
+        indent="yes"
         standalone="no"
         doctype-public="+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN"
         doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
@@ -48,7 +52,21 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="gedcom:value">
+    <xsl:template match="hier:node">
+        <xsl:element name="gedcom:node">
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="hier:root">
+        <xsl:element name="gedcom:nodes">
+            <xsl:namespace name="lines" select="'https://mosher.mine.nu/xmlns/lines'"/>
+            <xsl:namespace name="hier" select="'https://mosher.mine.nu/xmlns/hier'"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="hier:value">
         <xsl:choose>
             <xsl:when test="fn:count(./text()) != 0">
                 <xsl:analyze-string select="gedcom:maskDoubleAts(./text())" regex="^\s*(@[^@]*@?)?(?:\s*(\S+)\s?(.*))?$" flags="s">
