@@ -19,11 +19,12 @@
     />
 
     <xsl:param name="filename" as="xs:string"/>
+    <xsl:param name="base-dir" select="fn:static-base-uri()"/>
     <xsl:param name="encoding" as="xs:string" select="'UTF-8'"/>
 
     <xsl:template name="xsl:initial-template">
         <xsl:element name="lines:lines">
-            <xsl:for-each select="fn:tokenize(fn:unparsed-text($filename, $encoding), '\r|\n|\r\n')">
+            <xsl:for-each select="fn:tokenize(fn:unparsed-text(fn:resolve-uri($filename, $base-dir), $encoding), '\r|\n|\r\n')">
                 <xsl:if test="fn:string-length(.) != 0">
                     <xsl:element name="lines:line">
                         <xsl:attribute name="lines:seq">
