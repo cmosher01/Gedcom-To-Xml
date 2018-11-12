@@ -6,17 +6,7 @@
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:lines="https://mosher.mine.nu/xmlns/lines"
 >
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        indent="yes"
-        standalone="no"
-        doctype-public="+//IDN mosher.mine.nu//DTD lines 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/lines.dtd"
-        cdata-section-elements="lines:line"
-    />
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
     <xsl:param name="filename" as="xs:string"/>
     <xsl:param name="base-dir" select="fn:static-base-uri()"/>
@@ -36,5 +26,4 @@
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
-
 </xsl:stylesheet>

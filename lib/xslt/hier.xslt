@@ -7,23 +7,12 @@
     xmlns:lines="https://mosher.mine.nu/xmlns/lines"
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
 >
-
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        indent="yes"
-        standalone="no"
-        doctype-public="+//IDN mosher.mine.nu//DTD hier 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/hier.dtd"
-        cdata-section-elements="hier:value"
-    />
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
     <xsl:key
         name="child-by-parent"
         match="hier:node"
-        use="fn:generate-id(preceding-sibling::*[(./@hier:level) &lt; (current()/@hier:level)][1])"
+        use="fn:generate-id(preceding-sibling::*[xs:nonNegativeInteger(@hier:level) lt xs:nonNegativeInteger(current()/@hier:level)][1])"
     />
 
     <xsl:template match="node()|@*">
@@ -31,10 +20,11 @@
             <xsl:apply-templates select="node()|@*" />
         </xsl:copy>
     </xsl:template>
+
     <xsl:template match="hier:root">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="hier:node[@hier:level = 0]"/>
+            <xsl:apply-templates select="hier:node[xs:nonNegativeInteger(@hier:level) eq 0]"/>
         </xsl:copy>
     </xsl:template>
 

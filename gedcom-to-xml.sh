@@ -6,5 +6,14 @@ if [ $# = 0 ] ; then
     echo "Converts input.ged to XML on standard output." >&2
     exit 1
 fi
+
+cj="$(readlink -f $calabash)"
+echo "Using Calabash jar file: $cj" >&2
+if [ ! -r "$cj" ] ; then
+    echo "Error: cannot find Calabash jar file $calabash" >&2
+    exit 1
+fi
+
 here="$(dirname "$(readlink -f "$0")")"
-java -jar $calabash -p base-dir=file://$(pwd)/ -p filename="$1" $here/src/main/resources/gedcom.xpl
+
+java -jar "$cj" -p base-dir=file://$(pwd)/ -p filename="$1" $here/gedcom.xpl

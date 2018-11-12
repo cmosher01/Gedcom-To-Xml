@@ -9,28 +9,13 @@
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
 >
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        standalone="no"
-        indent="yes"
-        doctype-public="+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
-        cdata-section-elements="gedcom:value"
-    />
-
-
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
-
-
-
 
     <xsl:template match="gedcom:node[./gedcom:node/gedcom:value/@gedcom:tag='CONC' or ./gedcom:node/gedcom:value/@gedcom:tag='CONT']">
         <xsl:copy>

@@ -9,21 +9,11 @@
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
 >
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        indent="yes"
-        standalone="no"
-        doctype-public="+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
-        cdata-section-elements="gedcom:value"
-    />
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
 
 
-    <xsl:param name="idfile" as="document-node()"/>
+    <xsl:variable name="idfile" as="document-node()" select="fn:head(fn:tail(collection()))"/>
 
     <xsl:key name="mapIds" match="gedcom:id" use="@gedcom:id"/>
 
@@ -34,12 +24,13 @@
 
     <xsl:function name="gedcom:mapPtr" as="xs:anyURI">
         <xsl:param name="gedcomPtr" as="xs:string"/>
-        <xsl:sequence select="xs:anyURI(fn:concat('#',fn:key('mapIds', $gedcomPtr, $idfile)/@xml:id))"/>
+        <xsl:sequence select="xs:anyURI(fn:concat('#', fn:key('mapIds', $gedcomPtr, $idfile)/@xml:id))"/>
     </xsl:function>
 
 
 
-    <xsl:template match="@*|node()">
+
+     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>

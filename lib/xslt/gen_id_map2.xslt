@@ -5,16 +5,7 @@
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
 >
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        indent="yes"
-        standalone="no"
-        doctype-public="+//IDN mosher.mine.nu//DTD gedcom ids 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/gedcom/ids.dtd"
-    />
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
     <xsl:template match="gedcom:nodes[.//gedcom:value/@gedcom:id-valid = 'false']">
         <xsl:element name="gedcom:ids">

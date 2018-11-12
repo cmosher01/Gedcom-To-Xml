@@ -8,17 +8,7 @@
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
 >
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        indent="yes"
-        standalone="no"
-        doctype-public="+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
-        cdata-section-elements="gedcom:value"
-    />
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
 
 
@@ -52,16 +42,16 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="hier:node">
-        <xsl:element name="gedcom:node">
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
-    </xsl:template>
-
     <xsl:template match="hier:root">
         <xsl:element name="gedcom:nodes">
             <xsl:namespace name="lines" select="'https://mosher.mine.nu/xmlns/lines'"/>
             <xsl:namespace name="hier" select="'https://mosher.mine.nu/xmlns/hier'"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="hier:node">
+        <xsl:element name="gedcom:node">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>

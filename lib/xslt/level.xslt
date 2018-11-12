@@ -7,37 +7,31 @@
     xmlns:lines="https://mosher.mine.nu/xmlns/lines"
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
 >
-    <xsl:output
-        method="xml"
-        version="1.1"
-        omit-xml-declaration="no"
-        encoding="UTF-8"
-        indent="yes"
-        standalone="no"
-        doctype-public="+//IDN mosher.mine.nu//DTD hier 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/hier.dtd"
-        cdata-section-elements="hier:value"
-    />
+    <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
+
+    <xsl:param name="reLevel" static="true" as="xs:string" select="'^\s*(\d+)(.*?)$'"/>
+
+
 
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+
     <xsl:template match="lines:lines">
         <xsl:element name="hier:root">
-            <xsl:namespace name="lines" select="'https://mosher.mine.nu/xmlns/lines'"/>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
-    <xsl:param name="reLevel" static="true" as="xs:string" select="'^\s*(\d+)(.*?)$'"/>
+
     <xsl:template match="lines:line">
         <xsl:element name="hier:node">
             <xsl:apply-templates select="@*"/>
             <xsl:analyze-string select="./node()" regex="{$reLevel}">
                 <xsl:matching-substring>
                     <xsl:attribute name="hier:level">
-                        <xsl:sequence select="fn:regex-group(1)"/>
+                        <xsl:sequence select="xs:nonNegativeInteger(fn:regex-group(1))"/>
                     </xsl:attribute>
                     <xsl:element name="hier:value">
                         <xsl:sequence select="fn:regex-group(2)"/>
