@@ -1,0 +1,58 @@
+<rng:grammar
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema"
+    xmlns:hier="https://mosher.mine.nu/xmlns/hier"
+>
+    <rng:include href="lines.rng.xml">
+        <rng:start>
+            <rng:ref name="hier-root"/>
+        </rng:start>
+    </rng:include>
+
+    <rng:define name="hier-root">
+        <rng:element name="hier:root">
+            <rng:zeroOrMore>
+                <rng:ref name="hier-node"/>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="hier-node">
+        <rng:element name="hier:node">
+            <rng:ref name="hier-node-attrs"/>
+            <rng:ref name="hier-value"/>
+            <rng:zeroOrMore>
+                <rng:ref name="hier-node"/>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+    <rng:define name="hier-node-attrs">
+        <rng:optional>
+            <rng:ref name="lines-seq"/>
+        </rng:optional>
+        <rng:optional>
+            <rng:ref name="hier-level"/>
+        </rng:optional>
+        <rng:optional>
+            <rng:ref name="hier-invalid"/>
+        </rng:optional>
+    </rng:define>
+
+    <rng:define name="hier-level">
+        <rng:attribute name="hier:level">
+            <rng:data type="nonNegativeInteger"/>
+        </rng:attribute>
+    </rng:define>
+
+    <rng:define name="hier-invalid">
+        <rng:attribute name="hier:invalid">
+            <rng:data type="boolean"/>
+        </rng:attribute>
+    </rng:define>
+
+    <rng:define name="hier-value">
+        <rng:element name="hier:value">
+            <rng:text/>
+        </rng:element>
+    </rng:define>
+</rng:grammar>

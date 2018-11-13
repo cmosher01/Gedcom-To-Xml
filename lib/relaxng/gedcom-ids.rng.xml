@@ -1,0 +1,28 @@
+<rng:grammar
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema"
+    xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
+>
+    <rng:start>
+        <rng:ref name="gedcom-ids"/>
+    </rng:start>
+
+    <rng:define name="gedcom-ids">
+        <rng:element name="gedcom:ids">
+            <rng:zeroOrMore>
+                <rng:ref name="gedcom-id"/>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="gedcom-id">
+        <rng:element name="gedcom:id">
+            <rng:attribute name="xml:id">
+                <rng:data type="ID"/>
+            </rng:attribute>
+            <rng:attribute name="gedcom:id">
+                <rng:text/>
+            </rng:attribute>
+        </rng:element>
+    </rng:define>
+</rng:grammar>

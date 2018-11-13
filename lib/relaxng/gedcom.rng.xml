@@ -1,0 +1,79 @@
+<rng:grammar
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema"
+    xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+    <rng:include href="hier.rng.xml">
+        <rng:start>
+            <rng:ref name="gedcom-nodes"/>
+        </rng:start>
+    </rng:include>
+
+    <rng:define name="gedcom-nodes">
+        <rng:element name="gedcom:nodes">
+            <rng:zeroOrMore>
+                <rng:ref name="gedcom-node"/>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="gedcom-node">
+        <rng:element name="gedcom:node">
+            <rng:ref name="hier-node-attrs"/>
+            <rng:ref name="gedcom-value"/>
+            <rng:optional>
+                <rng:ref name="gedcom-data"/>
+            </rng:optional>
+            <rng:zeroOrMore>
+                <rng:ref name="gedcom-node"/>
+            </rng:zeroOrMore>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="gedcom-value">
+        <rng:element name="gedcom:value">
+            <rng:ref name="gedcom-attrs"/>
+            <rng:text/>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="gedcom-data">
+        <rng:element name="gedcom:data">
+            <rng:empty/>
+        </rng:element>
+    </rng:define>
+
+    <rng:define name="gedcom-attrs">
+        <rng:optional>
+            <rng:attribute name="xml:id">
+                <rng:data type="ID"/>
+            </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+            <rng:attribute name="gedcom:id">
+                <rng:text/>
+            </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+            <rng:attribute name="gedcom:id-valid">
+                <rng:data type="boolean"/>
+            </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+            <rng:attribute name="gedcom:tag">
+                <rng:text/>
+            </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+            <rng:attribute name="xlink:href">
+                <rng:data type="anyURI"/>
+            </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+            <rng:attribute name="gedcom:ptr">
+                <rng:text/>
+            </rng:attribute>
+        </rng:optional>
+    </rng:define>
+</rng:grammar>
