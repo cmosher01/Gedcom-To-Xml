@@ -8,9 +8,9 @@ if [ $# = 0 ] ; then
 fi
 
 echo "Checking for installation of Calabash XML." >&2
-if ! calabash -i source= -s p:count >/dev/null 2>&1 ; then
+if ! calabash -i source=p:empty -s p:count >&2 ; then
     echo "Please install calabash to run the pipeline." >&2
-    calabash
+    calabash >&2
     exit 1
 fi
 
@@ -22,5 +22,7 @@ fi
 
 me="$(perl -MCwd -e 'print Cwd::abs_path shift' "$0")"
 here="$(dirname "$me")"
+
+echo "Converting GEDCOM file..." >&2
 
 calabash -p base-dir=file://$(pwd)/ -p filename="$in" $here/gedcom.xpl
