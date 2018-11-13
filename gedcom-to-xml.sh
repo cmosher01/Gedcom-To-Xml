@@ -25,4 +25,4 @@ here="$(dirname "$me")"
 
 echo "Converting GEDCOM file..." >&2
 
-calabash -p base-dir=file://$(pwd)/ -p filename="$in" $here/gedcom.xpl
+calabash -p "base-dir=file://$(pwd)/" -p "filename=$in" $here/gedcom.xpl
