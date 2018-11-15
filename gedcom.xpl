@@ -11,7 +11,6 @@
     </p:input>
 
     <p:output port="result"/>
-<!--
     <p:serialization port="result"
         version="1.1"
         indent="true"
@@ -20,13 +19,6 @@
         doctype-public="+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN"
         doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
     />
- -->
-    <p:serialization port="result"
-        version="1.1"
-        indent="true"
-        omit-xml-declaration="false"
-    />
-
 
     <p:xslt name="lines-to-xml" template-name="xsl:initial-template">
         <p:input port="stylesheet">
@@ -82,6 +74,8 @@
         </p:input>
     </p:validate-with-relax-ng>
 
+
+
     <p:xslt name="parse-gedcom-lines">
         <p:input port="stylesheet">
             <p:document href="lib/xslt/parse_raw_nodes.xslt"/>
@@ -94,6 +88,8 @@
         </p:input>
     </p:validate-with-relax-ng>
 
+
+
     <p:xslt name="generate-id-map-or-remap">
         <p:input port="stylesheet">
             <p:document href="lib/xslt/gen_id_map2.xslt"/>
@@ -105,6 +101,8 @@
             <p:document href="lib/relaxng/gedcom-ids.rng.xml"/>
         </p:input>
     </p:validate-with-relax-ng>
+
+
 
     <p:xslt name="remap-ids">
         <p:input port="stylesheet">
@@ -121,6 +119,8 @@
             <p:document href="lib/relaxng/gedcom.rng.xml"/>
         </p:input>
     </p:validate-with-relax-ng>
+
+
 
     <p:xslt name="process-cont-conc-lines">
         <p:input port="stylesheet">
