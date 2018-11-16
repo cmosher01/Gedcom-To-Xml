@@ -17,22 +17,22 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="gedcom:node[./gedcom:node/gedcom:value/@gedcom:tag='CONC' or ./gedcom:node/gedcom:value/@gedcom:tag='CONT']">
+    <xsl:template match="gedcom:node[./gedcom:node/@gedcom:tag='CONC' or ./gedcom:node/@gedcom:tag='CONT']">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
 
             <xsl:element name="gedcom:value">
                 <xsl:apply-templates select="gedcom:value/@*"/>
                 <xsl:value-of select="gedcom:value/node()"/>
-                <xsl:iterate select="gedcom:node[./gedcom:value/@gedcom:tag='CONC' or ./gedcom:value/@gedcom:tag='CONT']">
-                    <xsl:if test="./gedcom:value/@gedcom:tag='CONT'">
+                <xsl:iterate select="gedcom:node[./@gedcom:tag='CONC' or ./@gedcom:tag='CONT']">
+                    <xsl:if test="./@gedcom:tag='CONT'">
                         <xsl:value-of select="'&#x0A;'"/>
                     </xsl:if>
                     <xsl:value-of select="gedcom:value/node()"/>
                 </xsl:iterate>
             </xsl:element>
 
-            <xsl:apply-templates select="gedcom:node[not(./gedcom:value/@gedcom:tag='CONC' or ./gedcom:value/@gedcom:tag='CONT')]"/>
+            <xsl:apply-templates select="gedcom:node[not(./@gedcom:tag='CONC' or ./@gedcom:tag='CONT')]"/>
         </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

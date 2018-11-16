@@ -7,13 +7,13 @@
 >
     <xsl:output method="xml" version="1.1" encoding="UTF-8"/>
 
-    <xsl:template match="gedcom:nodes[.//gedcom:value/@gedcom:id-valid = 'false']">
+    <xsl:template match="gedcom:nodes[.//gedcom:node/@gedcom:id-valid = 'false']">
         <xsl:element name="gedcom:ids">
-            <xsl:apply-templates select="@*|node()" mode="generate-ids"/>
+            <xsl:apply-templates select=".//gedcom:node" mode="generate-ids"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="gedcom:value" mode="generate-ids">
+    <xsl:template match="gedcom:node" mode="generate-ids">
         <xsl:if test="fn:count(@gedcom:id) != 0">
             <xsl:element name="gedcom:id">
                 <xsl:attribute name="gedcom:id">
@@ -28,11 +28,11 @@
 
     <xsl:template match="gedcom:nodes">
         <xsl:element name="gedcom:ids">
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates select=".//gedcom:node"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="gedcom:value">
+    <xsl:template match="gedcom:node">
         <xsl:if test="fn:count(@gedcom:id) != 0">
             <xsl:element name="gedcom:id">
                 <xsl:attribute name="gedcom:id">

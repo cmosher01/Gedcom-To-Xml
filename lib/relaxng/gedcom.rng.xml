@@ -20,6 +20,7 @@
 
     <rng:define name="gedcom-node">
         <rng:element name="gedcom:node">
+            <rng:ref name="gedcom-node-attrs"/>
             <rng:ref name="hier-node-attrs"/>
             <rng:ref name="gedcom-value"/>
             <rng:optional>
@@ -33,7 +34,7 @@
 
     <rng:define name="gedcom-value">
         <rng:element name="gedcom:value">
-            <rng:ref name="gedcom-attrs"/>
+            <rng:ref name="gedcom-value-attrs"/>
             <rng:text/>
         </rng:element>
     </rng:define>
@@ -44,7 +45,7 @@
         </rng:element>
     </rng:define>
 
-    <rng:define name="gedcom-attrs">
+    <rng:define name="gedcom-node-attrs">
         <rng:optional>
             <rng:attribute name="xml:id">
                 <rng:data type="ID"/>
@@ -65,6 +66,9 @@
                 <rng:text/>
             </rng:attribute>
         </rng:optional>
+    </rng:define>
+
+    <rng:define name="gedcom-value-attrs">
         <rng:optional>
             <rng:attribute name="xlink:href">
                 <rng:data type="anyURI"/>

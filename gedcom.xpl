@@ -90,7 +90,33 @@
 
 
 
-    <p:xslt name="generate-id-map-or-remap">
+    <p:xslt name="process-cont-conc-lines">
+        <p:input port="stylesheet">
+            <p:document href="lib/xslt/contconc.xslt"/>
+        </p:input>
+    </p:xslt>
+
+    <p:validate-with-relax-ng name="v-process-cont-conc-lines">
+        <p:input port="schema">
+            <p:document href="lib/relaxng/gedcom.rng.xml"/>
+        </p:input>
+    </p:validate-with-relax-ng>
+
+    <p:xslt name="extract-pointers">
+        <p:input port="stylesheet">
+            <p:document href="lib/xslt/extract_ptrs.xslt"/>
+        </p:input>
+    </p:xslt>
+
+    <p:validate-with-relax-ng name="v-extract-pointers">
+        <p:input port="schema">
+            <p:document href="lib/relaxng/gedcom.rng.xml"/>
+        </p:input>
+    </p:validate-with-relax-ng>
+
+
+
+     <p:xslt name="generate-id-map-or-remap">
         <p:input port="stylesheet">
             <p:document href="lib/xslt/gen_id_map2.xslt"/>
         </p:input>
@@ -109,26 +135,12 @@
             <p:document href="lib/xslt/remap_ids2.xslt"/>
         </p:input>
         <p:input port="source">
-            <p:pipe step="v-parse-gedcom-lines" port="result"/>
+            <p:pipe step="v-extract-pointers" port="result"/>
             <p:pipe step="v-generate-id-map-or-remap" port="result"/>
         </p:input>
     </p:xslt>
 
     <p:validate-with-relax-ng name="v-remap-ids">
-        <p:input port="schema">
-            <p:document href="lib/relaxng/gedcom.rng.xml"/>
-        </p:input>
-    </p:validate-with-relax-ng>
-
-
-
-    <p:xslt name="process-cont-conc-lines">
-        <p:input port="stylesheet">
-            <p:document href="lib/xslt/contconc.xslt"/>
-        </p:input>
-    </p:xslt>
-
-    <p:validate-with-relax-ng name="v-process-cont-conc-lines">
         <p:input port="schema">
             <p:document href="lib/relaxng/gedcom.rng.xml"/>
         </p:input>

@@ -36,24 +36,26 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="gedcom:value[@gedcom:id|@gedcom:ptr]">
+    <xsl:template match="gedcom:node[@gedcom:id]">
         <xsl:copy>
-            <xsl:if test="@gedcom:id">
-                <xsl:variable name="xml-id" select="gedcom:mapId(@gedcom:id)"/>
-                <xsl:if test="$xml-id != ''">
-                    <xsl:attribute name="xml:id">
-                        <xsl:value-of select="$xml-id"/>
-                    </xsl:attribute>
-                </xsl:if>
+            <xsl:variable name="xml-id" select="gedcom:mapId(@gedcom:id)"/>
+            <xsl:if test="$xml-id != ''">
+                <xsl:attribute name="xml:id">
+                    <xsl:value-of select="$xml-id"/>
+                </xsl:attribute>
             </xsl:if>
 
-            <xsl:if test="@gedcom:ptr">
-                <xsl:variable name="xlink-href" select="gedcom:mapPtr(@gedcom:ptr)"/>
-                <xsl:if test="$xlink-href != '#'">
-                    <xsl:attribute name="xlink:href">
-                        <xsl:value-of select="$xlink-href"/>
-                    </xsl:attribute>
-                </xsl:if>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="gedcom:value[@gedcom:ptr]">
+        <xsl:copy>
+            <xsl:variable name="xlink-href" select="gedcom:mapPtr(@gedcom:ptr)"/>
+            <xsl:if test="$xlink-href != '#'">
+                <xsl:attribute name="xlink:href">
+                    <xsl:value-of select="$xlink-href"/>
+                </xsl:attribute>
             </xsl:if>
 
             <xsl:apply-templates select="@*|node()"/>
