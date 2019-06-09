@@ -20,6 +20,8 @@
         doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
     />
 
+
+
     <p:xslt name="lines-to-xml" template-name="xsl:initial-template">
         <p:input port="stylesheet">
             <p:document href="lib/xslt/toxml.xslt"/>
@@ -101,6 +103,8 @@
             <p:document href="lib/relaxng/gedcom.rng.xml"/>
         </p:input>
     </p:validate-with-relax-ng>
+
+
 
     <p:xslt name="extract-pointers">
         <p:input port="stylesheet">

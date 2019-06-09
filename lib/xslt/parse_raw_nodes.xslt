@@ -49,69 +49,6 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
-<!--
-    <xsl:template match="hier:node">
-        <xsl:element name="gedcom:node">
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="hier:value">
-        <xsl:choose>
-            <xsl:when test="fn:count(./text()) != 0">
-                <xsl:analyze-string select="gedcom:maskDoubleAts(./text())" regex="^\s*(@[^@]*@?)?(?:\s*(\S+)\s?(.*))?$" flags="s">
-                    <xsl:matching-substring>
-                        <xsl:element name="gedcom:value">
-                            <xsl:variable name="id">
-                                <xsl:value-of select="gedcom:restoreAts(gedcom:extractId(fn:regex-group(1)))"/>
-                            </xsl:variable>
-                            <xsl:if test="fn:string-length($id) != 0">
-                                <xsl:attribute name="gedcom:id">
-                                    <xsl:value-of select="$id"/>
-                                </xsl:attribute>
-                                <xsl:attribute name="gedcom:id-valid">
-                                    <xsl:value-of select="fn:matches($id, '^[A-Za-z][A-Za-z0-9]*$')"/>
-                                </xsl:attribute>
-                            </xsl:if>
-
-                            <xsl:variable name="tag">
-                                <xsl:value-of select="gedcom:restoreAts(fn:regex-group(2))"/>
-                            </xsl:variable>
-                            <xsl:if test="fn:string-length($tag) != 0">
-                                <xsl:attribute name="gedcom:tag">
-                                    <xsl:value-of select="$tag"/>
-                                </xsl:attribute>
-                            </xsl:if>
-
-
-***************
-                            <xsl:variable name="ptr">
-                                <xsl:value-of select="gedcom:restoreAts(gedcom:extractId(fn:regex-group(3)))"/>
-                            </xsl:variable>
-                            <xsl:choose>
-                                <xsl:when test="fn:string-length($ptr) != 0">
-                                    <xsl:attribute name="gedcom:ptr">
-                                        <xsl:value-of select="$ptr"/>
-                                    </xsl:attribute>
-                                </xsl:when>
-                                <xsl:otherwise>
-***************
-                                     <xsl:value-of select="gedcom:restoreAts(fn:regex-group(3))"/>
-***************
-                                 </xsl:otherwise>
-                            </xsl:choose>
-***************
-                        </xsl:element>
-                    </xsl:matching-substring>
-                </xsl:analyze-string>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:element name="gedcom:value"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
--->
     <xsl:template match="hier:value"/>
 
     <xsl:template match="hier:node">
