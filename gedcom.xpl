@@ -149,4 +149,12 @@
             <p:document href="lib/relaxng/gedcom.rng.xml"/>
         </p:input>
     </p:validate-with-relax-ng>
+
+
+
+     <p:xslt name="strip-attrs">
+        <p:input port="stylesheet">
+            <p:document href="lib/xslt/strip_attrs.xslt"/>
+        </p:input>
+    </p:xslt>
 </p:declare-step>
