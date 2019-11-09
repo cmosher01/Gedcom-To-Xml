@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    version="1.1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:lines="https://mosher.mine.nu/xmlns/lines"
+    targetNamespace="https://mosher.mine.nu/xmlns/lines"
+    elementFormDefault="qualified"
+    attributeFormDefault="qualified"
+>
+    <xs:element name="lines">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="lines:line"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="line">
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="lines:lines-seq"/>
+        </xs:complexType>
+    </xs:element>
+
+
+
+    <xs:attributeGroup name="lines-seq">
+        <xs:attribute name="seq" use="required" type="xs:positiveInteger"/>
+    </xs:attributeGroup>
+</xs:schema>

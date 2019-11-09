@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    version="1.1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:lines="https://mosher.mine.nu/xmlns/lines"
+    xmlns:hier="https://mosher.mine.nu/xmlns/hier"
+    targetNamespace="https://mosher.mine.nu/xmlns/hier"
+    elementFormDefault="qualified"
+    attributeFormDefault="qualified"
+>
+    <xs:import namespace="https://mosher.mine.nu/xmlns/lines" schemaLocation="lines.xsd"/>
+
+
+
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="hier:node"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="node">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="hier:value"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="hier:node"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="hier:hier-node-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="value" type="xs:string"/>
+
+
+
+    <xs:attributeGroup name="hier-node-attrs">
+        <xs:attributeGroup ref="lines:lines-seq"/>
+        <xs:attribute name="level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="invalid" type="xs:boolean"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="hier-level">
+        <xs:attribute name="level" use="required" type="xs:nonNegativeInteger"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="hier-invalid">
+        <xs:attribute name="invalid" use="required" type="xs:boolean"/>
+    </xs:attributeGroup>
+</xs:schema>
