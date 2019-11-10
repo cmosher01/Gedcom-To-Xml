@@ -28,43 +28,32 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="gedcom:value"/>
-                <xs:element minOccurs="0" ref="gedcom:data"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="gedcom:node"/>
             </xs:sequence>
-            <xs:attributeGroup ref="gedcom:gedcom-node-attrs"/>
+            <xs:attributeGroup ref="gedcom:node-attrs"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="value">
-        <xs:complexType mixed="true">
-            <xs:attributeGroup ref="gedcom:gedcom-value-attrs"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="data">
-        <xs:complexType/>
-    </xs:element>
-
-
-
-    <xs:attributeGroup name="gedcom-node-attrs">
-        <xs:attribute name="id"/>
-        <xs:attribute name="id-valid" type="xs:boolean"/>
-        <xs:attributeGroup ref="hier:hier-node-attrs"/>
-        <xs:attributeGroup ref="gedcom:gedcom-node-attrs-core"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="gedcom-node-attrs-core">
+    <xs:attributeGroup name="node-attrs">
         <xs:attribute ref="xml:id"/>
         <xs:attribute name="tag"/>
+        <xs:attribute name="id"/>
+        <xs:attribute name="id-valid" type="xs:boolean"/>
+        <xs:attributeGroup ref="hier:node-attrs"/>
     </xs:attributeGroup>
 
-    <xs:attributeGroup name="gedcom-value-attrs">
-        <xs:attribute name="ptr"/>
-        <xs:attributeGroup ref="gedcom:gedcom-value-attrs-core"/>
-    </xs:attributeGroup>
+    <xs:element name="value">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attributeGroup ref="gedcom:value-attrs"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
 
-    <xs:attributeGroup name="gedcom-value-attrs-core">
+    <xs:attributeGroup name="value-attrs">
         <xs:attribute ref="xlink:href"/>
+        <xs:attribute name="ptr"/>
     </xs:attributeGroup>
 </xs:schema>

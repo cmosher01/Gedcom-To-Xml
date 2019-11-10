@@ -15,15 +15,13 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="line">
-        <xs:complexType mixed="true">
-            <xs:attributeGroup ref="lines:lines-seq"/>
+    <xs:element name="line" type="xs:string">
+        <xs:complexType>
+            <xs:attributeGroup ref="lines:line-attrs"/>
         </xs:complexType>
     </xs:element>
 
-
-
-    <xs:attributeGroup name="lines-seq">
-        <xs:attribute name="seq" use="required" type="xs:positiveInteger"/>
+    <xs:attributeGroup name="line-attrs">
+        <xs:attribute name="seq" type="xs:positiveInteger"/>
     </xs:attributeGroup>
 </xs:schema>
