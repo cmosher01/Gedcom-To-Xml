@@ -15,9 +15,13 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="line" type="xs:string">
+    <xs:element name="line">
         <xs:complexType>
-            <xs:attributeGroup ref="lines:line-attrs"/>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attributeGroup ref="lines:line-attrs"/>
+                </xs:extension>
+            </xs:simpleContent>
         </xs:complexType>
     </xs:element>
 
