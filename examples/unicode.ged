@@ -1,0 +1,15 @@
+0 HEAD
+1 CHAR UTF-8
+1 GEDC
+2 VERS 5.5
+2 FORM LINEAGE-LINKED
+1 SOUR example
+1 SUBM @S1@
+0 @S1@ SUBM
+1 NAME Chris /Mosher/
+2 NOTE 
+3 CONT Some ASCII characters: abc <>&'" 123
+3 CONT Cuneiform Sign A (Unicode codepoint U+12000): 𒀀 (Y
+3 CONC ou may need the right font to see it.)
+3 CONT
+0 TRLR

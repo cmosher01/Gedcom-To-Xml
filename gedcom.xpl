@@ -16,8 +16,6 @@
         indent="true"
         omit-xml-declaration="false"
         standalone="false"
-        doctype-public="+//IDN mosher.mine.nu//DTD gedcom nodes 1.0//EN"
-        doctype-system="https://mosher.mine.nu/dtd/gedcom/nodes.dtd"
     />
 
 
