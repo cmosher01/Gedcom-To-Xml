@@ -19,6 +19,18 @@ to parse or understand the GEDCOM tags. It robustly handles the follow GEDCOM fe
 * `CONC` and `CONT` lines
 
 ---
+## run
+
+Using docker:
+
+`docker run -i cmosher01/gedcom-to-xml < FILE.ged`
+
+Or else, install [XML Calabash](http://xmlcalabash.com/), then run:
+
+`./gedcom-to-xml.sh FILE.ged`
+
+---
+## example
 
 For example, the following GEDCOM file:
 
