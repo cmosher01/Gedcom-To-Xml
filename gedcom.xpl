@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Gedcom-To-Xml
+    Converts GEDCOM file to XML format.
+
+    Copyright © 2019–2020, by Christopher Alan Mosher, Shelton, Connecticut, USA, cmosher01@gmail.com .
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <p:declare-step
     version="1.0"
     xmlns:p="http://www.w3.org/ns/xproc"
@@ -26,11 +45,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-lines-to-xml">
+     <p:validate-with-xml-schema name="v-lines-to-xml">
         <p:input port="schema">
-            <p:document href="lib/relaxng/lines.rng.xml"/>
+            <p:document href="lib/xsd/lines.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -40,11 +59,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-find-level-numbers">
+    <p:validate-with-xml-schema name="v-find-level-numbers">
         <p:input port="schema">
-            <p:document href="lib/relaxng/hier.rng.xml"/>
+            <p:document href="lib/xsd/hier.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -54,11 +73,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-fix-missing-level-numbers">
+    <p:validate-with-xml-schema name="v-fix-missing-level-numbers">
         <p:input port="schema">
-            <p:document href="lib/relaxng/hier.rng.xml"/>
+            <p:document href="lib/xsd/hier.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -68,11 +87,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-generate-hierarchy">
+    <p:validate-with-xml-schema name="v-generate-hierarchy">
         <p:input port="schema">
-            <p:document href="lib/relaxng/hier.rng.xml"/>
+            <p:document href="lib/xsd/hier.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -82,11 +101,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-parse-gedcom-lines">
+    <p:validate-with-xml-schema name="v-parse-gedcom-lines">
         <p:input port="schema">
-            <p:document href="lib/relaxng/gedcom.rng.xml"/>
+            <p:document href="lib/xsd/gedcom.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -96,11 +115,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-process-cont-conc-lines">
+    <p:validate-with-xml-schema name="v-process-cont-conc-lines">
         <p:input port="schema">
-            <p:document href="lib/relaxng/gedcom.rng.xml"/>
+            <p:document href="lib/xsd/gedcom.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -110,11 +129,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-extract-pointers">
+    <p:validate-with-xml-schema name="v-extract-pointers">
         <p:input port="schema">
-            <p:document href="lib/relaxng/gedcom.rng.xml"/>
+            <p:document href="lib/xsd/gedcom.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -124,11 +143,11 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-generate-id-map-or-remap">
+    <p:validate-with-xml-schema name="v-generate-id-map-or-remap">
         <p:input port="schema">
-            <p:document href="lib/relaxng/gedcom-ids.rng.xml"/>
+            <p:document href="lib/xsd/gedcom-ids.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
 
 
 
@@ -142,11 +161,13 @@
         </p:input>
     </p:xslt>
 
-    <p:validate-with-relax-ng name="v-remap-ids">
+
+    <p:validate-with-xml-schema name="v-remap-ids">
         <p:input port="schema">
-            <p:document href="lib/relaxng/gedcom.rng.xml"/>
+            <p:document href="lib/xsd/gedcom.xsd"/>
         </p:input>
-    </p:validate-with-relax-ng>
+    </p:validate-with-xml-schema>
+
 
 
 
