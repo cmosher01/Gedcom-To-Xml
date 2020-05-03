@@ -12,7 +12,7 @@ The philosophy of this program is to be a simple conversion of syntax, and not t
 to parse or understand GEDCOM tags. It robustly handles the follow GEDCOM features:
 
 * hierarchical levels (become nested `node` elements)
-* tags (become attributes)
+* tags (become `tag` attributes)
 * values (become their own `value` elements)
 * cross-references (IDs become `xml:id` and pointers become `xlink:href`)
 * `@@` becomes `@`
@@ -27,13 +27,12 @@ Using docker:
 
 Or else, install [XML Calabash](http://xmlcalabash.com/), then run:
 
-`./gedcom-to-xml.sh < FILE.ged`
+`./gedcom-to-xml.sh < FILE.ged > FILE.xml`
 
 ---
 ## example
 
 For example, the following GEDCOM file:
-
 
 ```
 0 HEAD
@@ -83,6 +82,7 @@ Assumes UTF-8 input GEDCOM files. Any non-UTF-8 GEDCOM files must be converted t
 [Gedcom-Lib](https://github.com/cmosher01/Gedcom-Lib) may be of help in this regard.
 
 ---
+## implementation
 
 Gedcom-To-Xml is implemented as an XML XProc pipeline that converts the GEDCOM file
 in a series of XSL transformations. Each step transforms one aspect of the GEDCOM data
