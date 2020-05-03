@@ -27,8 +27,7 @@ WORKDIR $HOME
 RUN yum install -y unzip
 
 ADD https://github.com/ndw/xmlcalabash1/releases/download/$calabash_version/xmlcalabash-$calabash_version.zip ./xmlcalabash.zip
-
-RUN unzip xmlcalabash.zip
+RUN unzip xmlcalabash.zip && rm xmlcalabash.zip
 
 COPY calabash.sh /usr/local/bin/
 

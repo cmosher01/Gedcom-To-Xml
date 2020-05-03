@@ -21,6 +21,4 @@ cat - >$in
 me="$(perl -MCwd -e 'print Cwd::abs_path shift' "$0")"
 here="$(dirname "$me")"
 
-echo "Converting GEDCOM file..." >&2
 calabash -p "filename=$in" $here/gedcom.xpl
-echo "Created XML file." >&2

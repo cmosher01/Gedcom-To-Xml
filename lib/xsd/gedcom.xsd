@@ -29,8 +29,8 @@
     elementFormDefault="qualified"
     attributeFormDefault="qualified"
 >
-    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
-    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="http://www.w3.org/1999/xlink.xsd"/>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../www.w3.org/xml.xsd"/>
+    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="../www.w3.org/xlink.xsd"/>
     <xs:import namespace="https://mosher.mine.nu/xmlns/hier" schemaLocation="hier.xsd"/>
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
     Gedcom-To-Xml
     Converts GEDCOM file to XML format.
@@ -30,7 +30,8 @@
     </p:input>
 
     <p:output port="result"/>
-    <p:serialization port="result"
+    <p:serialization
+        port="result"
         version="1.1"
         indent="true"
         omit-xml-declaration="false"
@@ -120,7 +121,6 @@
             <p:document href="lib/xsd/gedcom.xsd"/>
         </p:input>
     </p:validate-with-xml-schema>
-
 
 
     <p:xslt name="extract-pointers">

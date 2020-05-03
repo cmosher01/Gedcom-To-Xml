@@ -2,8 +2,6 @@
 
 cd
 
-calabash="java -jar xmlcalabash*/xmlcalabash*.jar"
-
 in=$(mktemp)
 cat - >$in
 
@@ -13,4 +11,4 @@ if [ ! -s "$in" ] ; then
     exit 1
 fi
 
-exec $calabash -p "filename=$in" gedcom.xpl
+exec java -jar xmlcalabash*/xmlcalabash*.jar -p "filename=$in" gedcom.xpl
