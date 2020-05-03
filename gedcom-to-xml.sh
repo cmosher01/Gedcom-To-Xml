@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+CALABASH_HOME=${CALABASH_HOME:-~/xmlcalabash-*}
+
 if [ -t 0 -o $# -gt 0 ] ; then
     echo "usage: $0 <input.ged >output.xml" >&2
     echo "Converts input.ged to output.xml." >&2
@@ -7,10 +9,10 @@ if [ -t 0 -o $# -gt 0 ] ; then
     exit 1
 fi
 
-if ! calabash -i source=p:empty -s p:count >/dev/null 2>&1 ; then
+if [ ! -e $CALABASH_HOME/xmlcalabash-*.jar ] ; then
     set +e
-    calabash >&2 2>&1
-    echo "Please install calabash to run the pipeline." >&2
+    java -jar $CALABASH_HOME/xmlcalabash-*/xmlcalabash-*.jar >&2 2>&1
+    echo "Please install XML Calabash to run the pipeline." >&2
     echo "See http://xmlcalabash.com" >&2
     exit 1
 fi
@@ -21,4 +23,4 @@ cat - >$in
 me="$(perl -MCwd -e 'print Cwd::abs_path shift' "$0")"
 here="$(dirname "$me")"
 
-calabash -p "filename=$in" $here/gedcom.xpl
+java -jar $CALABASH_HOME/xmlcalabash-*.jar -p "filename=$in" $here/gedcom.xpl

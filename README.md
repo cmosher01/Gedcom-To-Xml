@@ -9,13 +9,13 @@ Copyright © 2019–2020, by Christopher Alan Mosher, Shelton, Connecticut, USA,
 Yet another GEDCOM to XML converter: converts a GEDCOM file into an XML file.
 
 The philosophy of this program is to be a simple conversion of syntax, and not to try
-to parse or understand the GEDCOM tags. It robustly handles the follow GEDCOM features:
+to parse or understand GEDCOM tags. It robustly handles the follow GEDCOM features:
 
 * hierarchical levels (become nested `node` elements)
 * tags (become attributes)
 * values (become their own `value` elements)
-* cross-references (IDs and pointers)
-* `@@` representing `@`
+* cross-references (IDs become `xml:id` and pointers become `xlink:href`)
+* `@@` becomes `@`
 * `CONC` and `CONT` lines
 
 ---
@@ -23,11 +23,11 @@ to parse or understand the GEDCOM tags. It robustly handles the follow GEDCOM fe
 
 Using docker:
 
-`docker run -i cmosher01/gedcom-to-xml < FILE.ged`
+`docker run -i cmosher01/gedcom-to-xml < FILE.ged > FILE.xml`
 
 Or else, install [XML Calabash](http://xmlcalabash.com/), then run:
 
-`./gedcom-to-xml.sh FILE.ged`
+`./gedcom-to-xml.sh < FILE.ged`
 
 ---
 ## example
@@ -81,3 +81,9 @@ This is a minimal example GEDCOM file.</gedcom:value>
 
 Assumes UTF-8 input GEDCOM files. Any non-UTF-8 GEDCOM files must be converted to UTF-8 first.
 [Gedcom-Lib](https://github.com/cmosher01/Gedcom-Lib) may be of help in this regard.
+
+---
+
+Gedcom-To-Xml is implemented as an XML XProc pipeline that converts the GEDCOM file
+in a series of XSL transformations. Each step transforms one aspect of the GEDCOM data
+and verifies the output against an XML schema.
