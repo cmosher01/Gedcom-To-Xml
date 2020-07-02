@@ -3,7 +3,6 @@
 Copyright © 2019–2020, by Christopher Alan Mosher, Shelton, Connecticut, USA, cmosher01@gmail.com .
 
 [![License](https://img.shields.io/github/license/cmosher01/Gedcom-To-Xml.svg)](https://www.gnu.org/licenses/gpl.html)
-[![Latest Release](https://img.shields.io/github/release-pre/cmosher01/Gedcom-To-Xml.svg)](https://github.com/cmosher01/Genealdb/releases/latest)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CVSSQ2BWDCKQ2)
 
 Yet another GEDCOM to XML converter: converts a GEDCOM file into an XML file.
