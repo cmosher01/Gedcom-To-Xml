@@ -72,6 +72,9 @@
 
     <xsl:template match="hier:node">
         <xsl:element name="gedcom:node">
+            <xsl:variable name="genid">
+                <xsl:value-of select="fn:generate-id()"/>
+            </xsl:variable>
             <xsl:apply-templates select="@*"/>
             <xsl:choose>
                 <xsl:when test="fn:count(hier:value/text()) != 0">
@@ -84,8 +87,15 @@
                                 <xsl:attribute name="gedcom:id">
                                     <xsl:value-of select="$id"/>
                                 </xsl:attribute>
-                                <xsl:attribute name="gedcom:id-valid">
-                                    <xsl:value-of select="fn:matches($id, '^[A-Za-z][A-Za-z0-9]*$')"/>
+                                <xsl:attribute name="xml:id">
+                                    <xsl:choose>
+                                        <xsl:when test="fn:matches($id, '^[A-Za-z][A-Za-z0-9]*$')">
+                                            <xsl:value-of select="$id"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$genid"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:attribute>
                             </xsl:if>
 

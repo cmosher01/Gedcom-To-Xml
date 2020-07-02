@@ -1,14 +1,17 @@
 0 HEAD
 1 CHAR UTF-8
-1 GEDC 
+1 GEDC
 2 VERS 5.5
 2 FORM LINEAGE-LINKED
-0 @ID:WITH:COLONS@ INDI
+0 @INVALID-ID@ INDI
 1 NAME Chris /Mosher/
-1 ASSO @ID:WITH:COLONS@
+1 ASSO @INVALID-ID@
 2 RELA self
 2 NOTE This GEDCOM file contains an ID wi
 3 CONC th characters that are invalid fo
 3 CONC r use within an XML ID.
 3 CONT An alternate unique ID is substituted.
+0 @VALIDID@ INDI
+1 NAME Chris /Mosher/
+1 ASSO @VALIDID@
 0 TRLR

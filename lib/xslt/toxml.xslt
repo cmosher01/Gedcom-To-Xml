@@ -34,14 +34,12 @@
     <xsl:template name="xsl:initial-template">
         <xsl:element name="lines:lines">
             <xsl:for-each select="fn:tokenize(fn:unparsed-text(fn:resolve-uri($filename, $base-dir), $encoding), '\r|\n|\r\n')">
-                <xsl:if test="fn:string-length(.) != 0">
-                    <xsl:element name="lines:line">
-                        <xsl:attribute name="lines:seq">
-                            <xsl:sequence select="fn:position()"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="."/>
-                    </xsl:element>
-                </xsl:if>
+                <xsl:element name="lines:line">
+                    <xsl:attribute name="lines:seq">
+                        <xsl:sequence select="fn:position()"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="."/>
+                </xsl:element>
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
