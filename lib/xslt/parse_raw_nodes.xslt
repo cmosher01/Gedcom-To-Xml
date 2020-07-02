@@ -87,6 +87,9 @@
                                 <xsl:attribute name="gedcom:id">
                                     <xsl:value-of select="$id"/>
                                 </xsl:attribute>
+                                <xsl:attribute name="gedcom:id-valid">
+                                    <xsl:value-of select="fn:matches($id, '^[A-Za-z][A-Za-z0-9]*$')"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="xml:id">
                                     <xsl:choose>
                                         <xsl:when test="fn:matches($id, '^[A-Za-z][A-Za-z0-9]*$')">
