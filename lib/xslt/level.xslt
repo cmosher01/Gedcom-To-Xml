@@ -47,24 +47,39 @@
     <xsl:template match="lines:line">
         <xsl:element name="hier:node">
             <xsl:apply-templates select="@*"/>
-            <xsl:analyze-string select="./node()" regex="{$reLevel}">
-                <xsl:matching-substring>
-                    <xsl:attribute name="hier:level">
-                        <xsl:sequence select="xs:nonNegativeInteger(fn:regex-group(1))"/>
-                    </xsl:attribute>
-                    <xsl:element name="hier:value">
-                        <xsl:sequence select="fn:regex-group(2)"/>
-                    </xsl:element>
-                </xsl:matching-substring>
-                <xsl:non-matching-substring>
+            <xsl:variable name="val">
+                <xsl:value-of select="./node()"/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="./node()">
+                    <xsl:analyze-string select="$val" regex="{$reLevel}">
+                        <xsl:matching-substring>
+                            <xsl:attribute name="hier:level">
+                                <xsl:sequence select="xs:nonNegativeInteger(fn:regex-group(1))"/>
+                            </xsl:attribute>
+                            <xsl:element name="hier:value">
+                                <xsl:sequence select="fn:regex-group(2)"/>
+                            </xsl:element>
+                        </xsl:matching-substring>
+                        <xsl:non-matching-substring>
+                            <xsl:attribute name="hier:invalid">
+                                <xsl:sequence select="fn:true()"/>
+                            </xsl:attribute>
+                            <xsl:element name="hier:value">
+                                <xsl:sequence select="."/>
+                            </xsl:element>
+                        </xsl:non-matching-substring>
+                    </xsl:analyze-string>
+                </xsl:when>
+                <xsl:otherwise>
                     <xsl:attribute name="hier:invalid">
                         <xsl:sequence select="fn:true()"/>
                     </xsl:attribute>
                     <xsl:element name="hier:value">
-                        <xsl:sequence select="."/>
+                        <xsl:sequence select="''"/>
                     </xsl:element>
-                </xsl:non-matching-substring>
-            </xsl:analyze-string>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>
     </xsl:template>
 </xsl:stylesheet>

@@ -21,8 +21,6 @@
 <xsl:stylesheet
     version="3.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
 >
