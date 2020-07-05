@@ -44,8 +44,6 @@ USER root
 ENV HOME /root
 WORKDIR $HOME
 
-RUN yum -y install tar shadow-utils
-
 COPY --from=build /root/build/distributions/*.tar ./
 RUN tar xvf *.tar --strip-components=1 -C /usr/local
 
@@ -54,4 +52,4 @@ USER user
 ENV HOME /home/user
 WORKDIR $HOME
 
-CMD ["gedcom-to-xml"]
+ENTRYPOINT ["gedcom-to-xml"]
