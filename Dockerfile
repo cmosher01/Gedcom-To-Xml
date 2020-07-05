@@ -16,22 +16,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM amazoncorretto:8 AS build
+FROM openjdk:14-oracle AS build
 
-ARG calabash_version=1.2.1-99
+MAINTAINER Christopher A. Mosher <cmosher01@gmail.com>
 
 USER root
 ENV HOME /root
 WORKDIR $HOME
 
-RUN yum install -y unzip
+RUN echo "org.gradle.daemon=false" >gradle.properties
 
-ADD https://github.com/ndw/xmlcalabash1/releases/download/$calabash_version/xmlcalabash-$calabash_version.zip ./xmlcalabash.zip
-RUN unzip xmlcalabash.zip && rm xmlcalabash.zip
+COPY gradle/ gradle/
+COPY gradlew ./
+RUN ./gradlew --version
 
-COPY calabash.sh /usr/local/bin/
+COPY settings.gradle ./
+COPY build.gradle ./
+COPY src/ ./src/
 
-COPY gedcom.xpl ./
-COPY lib ./lib
+RUN ./gradlew build
 
-ENTRYPOINT [ "/usr/local/bin/calabash.sh" ]
+
+
+FROM openjdk:14-oracle
+
+USER root
+ENV HOME /root
+WORKDIR $HOME
+
+RUN yum -y install tar shadow-utils
+
+COPY --from=build /root/build/distributions/*.tar ./
+RUN tar xvf *.tar --strip-components=1 -C /usr/local
+
+RUN useradd user
+USER user
+ENV HOME /home/user
+WORKDIR $HOME
+
+CMD ["gedcom-to-xml"]

@@ -1,0 +1,19 @@
+repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation group: 'nu.mine.mosher.xml', name: 'xslt-pipeline', version: 'latest.release'
+    runtimeOnly group: 'net.sf.saxon', name: 'Saxon-HE', version: 'latest.release'
+    runtimeOnly group: 'xerces', name: 'xercesImpl', version: 'latest.release'
+
+    // logging
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: 'latest.release'
+
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: 'latest.release'
+    implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: 'latest.integration'
+    runtimeOnly group: 'org.slf4j', name: 'log4j-over-slf4j', version: 'latest.release'
+    runtimeOnly group: 'org.slf4j', name: 'jcl-over-slf4j', version: 'latest.release'
+}
