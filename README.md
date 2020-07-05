@@ -39,6 +39,7 @@ For example, the following GEDCOM file:
 1 SUBM @S1@
 0 @S1@ SUBM
 1 NAME Chris /Mosher/
+1 EMAIL cmosher01@@gmail.com
 2 NOTE Note:
 3 CONT This is a minimal ex
 3 CONC ample GEDCOM file.
@@ -48,7 +49,7 @@ For example, the following GEDCOM file:
 gets converted to the following XML:
 
 ```xml
-<?xml version="1.1" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gedcom:nodes xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom">
    <gedcom:node gedcom:tag="HEAD">
       <gedcom:value/>
@@ -63,6 +64,9 @@ gets converted to the following XML:
       <gedcom:value/>
       <gedcom:node gedcom:tag="NAME">
          <gedcom:value>Chris /Mosher/</gedcom:value>
+      </gedcom:node>
+      <gedcom:node gedcom:tag="EMAIL">
+         <gedcom:value>cmosher01@gmail.com</gedcom:value>
          <gedcom:node gedcom:tag="NOTE">
             <gedcom:value>Note:
 This is a minimal example GEDCOM file.</gedcom:value>
@@ -83,6 +87,6 @@ Assumes UTF-8 input GEDCOM files. Any non-UTF-8 GEDCOM files must be converted t
 ---
 ## implementation
 
-Gedcom-To-Xml is implemented as an XML XProc pipeline that converts the GEDCOM file
-in a series of XSL transformations. Each step transforms one aspect of the GEDCOM data
-and verifies the output against an XML schema.
+Gedcom-To-Xml is implemented as a pipeline that converts the GEDCOM file using
+a series of XSL transformations. Each step transforms one aspect of the GEDCOM
+data and verifies the output against an XML schema.
