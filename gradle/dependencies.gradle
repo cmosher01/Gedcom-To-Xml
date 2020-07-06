@@ -6,8 +6,6 @@ repositories {
 
 dependencies {
     implementation group: 'nu.mine.mosher.xml', name: 'xslt-pipeline', version: 'latest.release'
-    runtimeOnly group: 'net.sf.saxon', name: 'Saxon-HE', version: 'latest.release'
-    runtimeOnly group: 'xerces', name: 'xercesImpl', version: 'latest.release'
 
     // logging
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: 'latest.release'
