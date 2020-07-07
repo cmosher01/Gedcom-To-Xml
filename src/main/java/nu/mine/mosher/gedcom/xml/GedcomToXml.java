@@ -2,19 +2,21 @@ package nu.mine.mosher.gedcom.xml;
 
 
 
-import nu.mine.mosher.xml.XsltPipeline;
-import org.slf4j.bridge.SLF4JBridgeHandler;
-import org.xml.sax.SAXException;
-import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import nu.mine.mosher.xml.XsltPipeline;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 
 
@@ -25,15 +27,57 @@ public class GedcomToXml {
         java.util.logging.Logger.getLogger("").setLevel(java.util.logging.Level.FINEST);
     }
 
-    public static void main(final String... args) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+    public static void main(final String... args) throws ParserConfigurationException, IOException, SAXException, TransformerException, URISyntaxException
+    {
+        final boolean verbose = verbose(args);
+
+        for (final String arg : args) {
+            if (!arg.startsWith("-")) {
+                final File fileIn = new File(arg).getCanonicalFile();
+                final File fileOut = outFileFor(fileIn);
+                runPipelineOn(fileIn, fileOut, verbose);
+            }
+        }
+        System.out.println();
+        System.err.println();
+    }
+
+    private static File outFileFor(final File fileIn) throws IOException {
+        final File dir = fileIn.getParentFile();
+
+        final String[] ss = fileIn.getName().split("\\.(?=[^.]+$)");
+        String s = ss[0];
+        if (!s.endsWith(".")) {
+            s += ".";
+        }
+
+        File newfile = new File(dir, s+"xml");
+        if (newfile.exists()) {
+            newfile = uniquify(dir, s,"xml");
+        }
+        return newfile;
+    }
+
+    private static File uniquify(File dir, String s, String typ) {
+        final String uniq = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnn").withZone(ZoneId.of("UTC")).format(Instant.now());
+        return new File(dir, s+uniq+"."+typ);
+    }
+
+    private static void runPipelineOn(final File fileIn, final File fileOut, final boolean verbose) throws ParserConfigurationException, TransformerException, SAXException, IOException {
         final XsltPipeline pipeline = new XsltPipeline();
-        pipeline.trace(false);
-        final Logger root = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(Level.WARN);
-        parseArgs(args, pipeline, root);
+
+        if (verbose) {
+            pipeline.trace(true);
+            ((Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.ALL);
+            System.setProperty("jaxp.debug", "1");
+        } else {
+            pipeline.trace(false);
+            ((Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.WARN);
+        }
 
         pipeline.xsd(lib("xsd/lines.xsd"));
 
+        pipeline.param("filename", fileIn.toURI().toURL());
         pipeline.initialTemplate(true);
         pipeline.xslt(lib("xslt/toxml.xslt"));
         pipeline.initialTemplate(false);
@@ -73,52 +117,23 @@ public class GedcomToXml {
         pipeline.xslt(lib("xslt/strip_attrs.xslt"));
         pipeline.validate();
 
-        pipeline.serialize(new BufferedOutputStream(new FileOutputStream(FileDescriptor.out)));
+        pipeline.serialize(new BufferedOutputStream(new FileOutputStream(fileOut)));
+
+        if (verbose) {
+            System.err.println(String.format("%s --> %s", fileIn, fileOut));
+        }
     }
 
-    private static void parseArgs(final String[] args, final XsltPipeline pipeline, final Logger root) throws IOException {
-        boolean ged = false;
+    private static boolean verbose(final String... args) {
         for (final String arg : args) {
             if (arg.equals("--verbose") || arg.equals("-v")) {
-                pipeline.trace(true);
-                root.setLevel(Level.ALL);
-                System.setProperty("jaxp.debug", "1");
-            } else {
-                if (!ged) {
-                    ged = true;
-                    pipeline.param("filename", asUrl(arg));
-                } else {
-                    throw new IllegalArgumentException("usage gedcom-to-xml input.ged");
-                }
+                return true;
             }
         }
-        if (!ged) {
-            throw new IllegalArgumentException("usage gedcom-to-xml input.ged");
-        }
+        return false;
     }
 
     private static URL lib(final String path) {
         return GedcomToXml.class.getResource("lib/"+path);
-    }
-
-    private static URL asUrl(final String pathOrUrl) throws IOException {
-        Throwable urlExcept;
-        try {
-            return new URI(pathOrUrl).toURL();
-        } catch (final Throwable e) {
-            urlExcept = e;
-        }
-
-        Throwable pathExcept;
-        try {
-            return Paths.get(pathOrUrl).toUri().toURL();
-        } catch (final Throwable e) {
-            pathExcept = e;
-        }
-
-        final IOException except = new IOException("Invalid path or URL: " + pathOrUrl);
-        except.addSuppressed(pathExcept);
-        except.addSuppressed(urlExcept);
-        throw except;
     }
 }
