@@ -9,7 +9,6 @@ dependencies {
 
     // logging
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: 'latest.release'
-
     implementation group: 'org.slf4j', name: 'slf4j-api', version: 'latest.release'
     implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: 'latest.integration'
     runtimeOnly group: 'org.slf4j', name: 'log4j-over-slf4j', version: 'latest.release'

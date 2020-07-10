@@ -18,22 +18,36 @@ to parse or understand GEDCOM tags. It robustly handles the follow GEDCOM featur
 * `CONC` and `CONT` lines
 
 ---
-## run
+## Run
 
-Using docker:
+Requires Java SE 11 or greater.
 
-`docker run -i cmosher01/gedcom-to-xml < FILE.ged > FILE.xml`
+```sh
+/path/to/gedcom-to-xml "My Family Tree.ged"
+```
 
-Or else, install [XML Calabash](http://xmlcalabash.com/), then run:
+creates corresponding `My Family Tree.xml` output file.
 
-`./gedcom-to-xml.sh < FILE.ged > FILE.xml`
+This program is safe to run; no existing files will be modified, overwritten, or deleted.
+If the corresponding XML output file already exists,
+then a new unique filename (with a timestamp) will be created instead.
+
+For usage information:
+```sh
+/path/to/gedcom-to-xml --help
+```
 
 ---
-## example
+## Tutorial
 
-For example, the following GEDCOM file:
-
+Install:
+```sh
+$ tar xf gedcom-to-xml-1.0.0.tar
 ```
+
+Create test GEDCOM file:
+```sh
+$ cat - >minimal.ged
 0 HEAD
 1 CHAR UTF-8
 1 SUBM @S1@
@@ -46,9 +60,14 @@ For example, the following GEDCOM file:
 0 TRLR
 ```
 
-gets converted to the following XML:
+Run it through Gedcom-To-Xml:
+```sh
+$ ./gedcom-to-xml-1.0.0/bin/gedcom-to-xml minimal.ged
+```
 
+See the resuting XML output file:
 ```xml
+$ cat minimal.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <gedcom:nodes xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom">
    <gedcom:node gedcom:tag="HEAD">
@@ -79,14 +98,35 @@ This is a minimal example GEDCOM file.</gedcom:value>
 </gedcom:nodes>
 ```
 
+
 ---
 
 Assumes UTF-8 input GEDCOM files. Any non-UTF-8 GEDCOM files must be converted to UTF-8 first.
 [Gedcom-Lib](https://github.com/cmosher01/Gedcom-Lib) may be of help in this regard.
 
 ---
-## implementation
+## Implementation
 
 Gedcom-To-Xml is implemented as a pipeline that converts the GEDCOM file using
 a series of XSL transformations. Each step transforms one aspect of the GEDCOM
 data and verifies the output against an XML schema.
+
+## Development
+
+Build using JDK 11 or greater.
+Depends on Xerces and Saxon-HE (latest versions).
+
+Quick start:
+
+```sh
+$ java -version
+openjdk version "11.0.5" 2019-10-15 LTS
+OpenJDK Runtime Environment Corretto-11.0.5.10.1 (build 11.0.5+10-LTS)
+OpenJDK 64-Bit Server VM Corretto-11.0.5.10.1 (build 11.0.5+10-LTS, mixed mode)
+$ git clone https://github.com/cmosher01/Gedcom-To-Xml.git
+$ cd Gedcom-To-Xml
+$ ./gradlew build
+$ tar xf build/distributions/gedcom-to-xml-1.0.0.tar
+$ ./gedcom-to-xml-1.0.0/bin/gedcom-to-xml examples/minimal.ged
+$ cat examples/minimal.xml
+```
