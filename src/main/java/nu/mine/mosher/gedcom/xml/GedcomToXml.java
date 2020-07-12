@@ -177,6 +177,9 @@ public class GedcomToXml {
         pipeline.xslt(lib("xslt/strip_attrs.xslt"));
         pipeline.validate();
 
+        pipeline.xmldecl(true);
+        pipeline.pretty(true);
+
         if (dryrun) {
             if (verbose) {
                 pipeline.serialize(new BufferedOutputStream(new OutputStream() { public void write(int b) { } }));
