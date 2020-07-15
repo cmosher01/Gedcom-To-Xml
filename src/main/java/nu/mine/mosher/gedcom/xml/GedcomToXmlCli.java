@@ -20,9 +20,8 @@
 
 package nu.mine.mosher.gedcom.xml;
 
-import ch.qos.logback.classic.*;
 import nu.mine.mosher.gedcom.charset.CharsetDetector;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -30,8 +29,10 @@ import java.util.*;
 
 @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "unused"})
 public class GedcomToXmlCli {
+    private final Logger LOG = LoggerFactory.getLogger(GedcomToXmlCli.class);
+
     public boolean help;
-    public boolean verbose;
+    public boolean trace;
     public boolean dryrun;
     public final List<Step> steps = new ArrayList<>(8);
 
@@ -41,27 +42,37 @@ public class GedcomToXmlCli {
         if (none.isPresent()) {
             throw new IllegalArgumentException("--help option does not allow a value");
         }
-        this.help = true;
+        if (!this.help) {
+            this.help = true;
 
-        System.out.println("usage:");
-        System.out.println();
-        System.out.println("    gedcom-to-xml { OPTION | input.ged } ...");
-        System.out.println();
-        System.out.println("options:");
-        System.out.println();
-        System.out.println("  --help                  show help and exit, do not run anything");
-        System.out.println("  --verbose={true|false}  display log messages, and output of every step of conversion");
-        System.out.println("  --dryrun={true|false}   do not write output files, just print report");
-        System.out.println("  --charset               detect charset of file(s) automatically (default)");
-        System.out.println("  --charset=CHARSET       assume file(s) are encoded in CHARSET");
+            System.out.println("usage:");
+            System.out.println();
+            System.out.println("    gedcom-to-xml { OPTION | input.ged } ...");
+            System.out.println();
+            System.out.println("options:");
+            System.out.println();
+            System.out.println("  --help             show help and exit, do not run anything");
+            System.out.println("  --verbose=LEVEL    logging level: trace, debug, info, warn, error");
+            System.out.println("  --dry-run          do not write output files, just print report");
+            System.out.println();
+            System.out.println("positional options:");
+            System.out.println();
+            System.out.println("  --charset          detect charset of file(s) automatically (default)");
+            System.out.println("  --charset=CHARSET  assume file(s) are encoded in CHARSET");
+        }
     }
 
     public void verbose(final Optional<String> b) {
-        this.verbose = parseBoolean("verbose", b);
+        final String level = LogUtil.setLevel(b.orElse("info"));
+        LOG.info("Verbose logging, at level: {}", level);
+        this.trace = LOG.isTraceEnabled();
     }
 
-    public void dryrun(final Optional<String> b) {
-        this.dryrun = parseBoolean("dryrun", b);
+    public void dry_run(final Optional<String> none) {
+        if (none.isPresent()) {
+            throw new IllegalArgumentException("--dry-run option does not allow a value");
+        }
+        this.dryrun = true;
     }
 
     public void charset(final Optional<String> name) {
@@ -82,15 +93,6 @@ public class GedcomToXmlCli {
 
 
     void execute() {
-        final Logger log = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        if (verbose) {
-            log.setLevel(Level.ALL);
-            System.setProperty("jaxp.debug", "1");
-            log.info("Will show verbose log messages.");
-        } else {
-            log.setLevel(Level.WARN);
-        }
-
         this.steps.forEach(Step::execute);
     }
 
@@ -112,6 +114,7 @@ public class GedcomToXmlCli {
         @Override
         public void execute() {
             GedcomToXmlCli.this.charsetForce = Optional.of(this.charset);
+            LOG.info("Force interpreting GEDCOM file as charset: {}.", this.charset.name());
         }
     }
 
@@ -132,6 +135,7 @@ public class GedcomToXmlCli {
         public void execute() {
             try {
                 final File fileOut = FileUtil.outFileFor(this.file);
+                LOG.info("Processing file: {} --> {}", this.file, fileOut);
                 final Charset charset;
                 if (charsetForce.isPresent()) {
                     charset = charsetForce.get();
@@ -140,28 +144,10 @@ public class GedcomToXmlCli {
                     charset = new CharsetDetector(gedcom).detect();
                     gedcom.close();
                 }
-                GedcomToXmlPipeline.runPipelineOn(this.file, charset, fileOut, verbose, dryrun);
+                GedcomToXmlPipeline.runPipelineOn(this.file, charset, fileOut, trace, dryrun);
             } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-
-
-
-
-    static boolean parseBoolean(final String option, final Optional<String> b) {
-        boolean r;
-        if (b.isPresent() && (b.get().equalsIgnoreCase("true") || b.get().equalsIgnoreCase("t"))) {
-            r = true;
-        } else if (b.isPresent() && (b.get().equalsIgnoreCase("false") || b.get().equalsIgnoreCase("f"))) {
-            r = false;
-        } else if (!b.isPresent()) {
-            r = true;
-        } else {
-            throw new IllegalArgumentException(String.format("Invalid value for option --%s={true|false}", option));
-        }
-        return r;
     }
 }

@@ -99,20 +99,12 @@ This is a minimal example GEDCOM file.</gedcom:value>
 ```
 
 
----
-
-Assumes UTF-8 input GEDCOM files. Any non-UTF-8 GEDCOM files must be converted to UTF-8 first.
-[Gedcom-Lib](https://github.com/cmosher01/Gedcom-Lib) may be of help in this regard.
-
----
 ## Implementation
-
 Gedcom-To-Xml is implemented as a pipeline that converts the GEDCOM file using
 a series of XSL transformations. Each step transforms one aspect of the GEDCOM
 data and verifies the output against an XML schema.
 
 ## Development
-
 Build using JDK 11 or greater.
 Depends on Xerces and Saxon-HE (latest versions).
 
