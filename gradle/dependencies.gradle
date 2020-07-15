@@ -5,7 +5,10 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'nu.mine.mosher.xml', name: 'xslt-pipeline', version: 'latest.release'
+    implementation group: 'nu.mine.mosher.xml', name: 'xslt-pipeline', version: 'latest.integration'
+    implementation group: 'nu.mine.mosher.gnopt', name: 'Gnopt', version: 'latest.integration'
+    implementation group: 'nu.mine.mosher.gedcom', name: 'gedcom-ansel', version: 'latest.integration'
+    implementation group: 'com.github.albfernandez', name: 'juniversalchardet', version: 'latest.release'
 
     // logging
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: 'latest.release'
