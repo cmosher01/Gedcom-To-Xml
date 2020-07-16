@@ -20,6 +20,7 @@
 
 package nu.mine.mosher.gedcom.charset;
 
+import nu.mine.mosher.gedcom.ansel.*;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.*;
 
@@ -51,26 +52,24 @@ public class HeuristicCharsetDetector {
     private static final Logger LOG = LoggerFactory.getLogger(DeclaredCharsetDetector.class);
 
     private static Optional<Charset> tryDetect(final BufferedInputStream gedcomStream, final int cBytesToCheck) throws IOException {
-        final UniversalDetector detector = new UniversalDetector();
+        Optional<Charset> charset = Optional.empty();
 
-        final int cBufferSize = 4 * 1024;
-        final byte[] buf = new byte[cBufferSize];
-        boolean first = true;
-        int sane = cBytesToCheck / cBufferSize;
-        for (int cRead = gedcomStream.read(buf); cRead > 0 && --sane > 0; cRead = gedcomStream.read(buf)) {
-            if (first && cRead >= 4) {
-                final Optional<Charset> prescreened = prescreen(buf);
-                if (prescreened.isPresent()) {
-                    return prescreened;
-                }
-            }
-            detector.handleData(buf, 0, cRead);
-            first = false;
+        if (!charset.isPresent()) {
+            charset = detectUtf16NoBom(gedcomStream, cBytesToCheck);
         }
 
-        detector.dataEnd();
+        if (!charset.isPresent()) {
+            charset = detectUniversal(gedcomStream, cBytesToCheck);
+        }
 
-        return charsetForName(detector.getDetectedCharset());
+        if (!charset.isPresent() || charset.get().equals(StandardCharsets.US_ASCII) || charset.get().equals(StandardCharsets.ISO_8859_1) || charset.get().name().equalsIgnoreCase("windows-1252")) {
+            final Optional<Charset> ansel = detectAnsel(gedcomStream, cBytesToCheck);
+            if (ansel.isPresent()) {
+                charset = ansel;
+            }
+        }
+
+        return charset;
     }
 
     /*
@@ -78,16 +77,43 @@ public class HeuristicCharsetDetector {
     We know GEDCOM stream starts with "0 ", so we can use that to our
     advantage in detecting UTF-16.
      */
-    private static Optional<Charset> prescreen(final byte[] b) {
-        if (b[0] == 0x30 && b[1] == 0x00 && b[2] == 0x20 && b[3] == 0x00) {
-            LOG.info("Pre-screen detected charset UTF-16 (LE) without BOM.");
-            return Optional.of(StandardCharsets.UTF_16LE);
+    private static Optional<Charset> detectUtf16NoBom(final BufferedInputStream gedcomStream, final int cBytesToCheck) throws IOException {
+        if (4 <= cBytesToCheck) {
+            gedcomStream.reset();
+            final byte[] b = new byte[4];
+            final int c = gedcomStream.read(b);
+            if (4 <= c) {
+                LOG.info("Checking for charset UTF-16 without BOM.");
+                if (b[0] == 0x30 && b[1] == 0x00 && b[2] == 0x20 && b[3] == 0x00) {
+                    LOG.info("Detected charset UTF-16 (LE) without BOM.");
+                    return Optional.of(StandardCharsets.UTF_16LE);
+                }
+                if (b[0] == 0x00 && b[1] == 0x30 && b[2] == 0x00 && b[3] == 0x20) {
+                    LOG.info("Detected charset UTF-16 (BE) without BOM.");
+                    return Optional.of(StandardCharsets.UTF_16BE);
+                }
+            }
         }
-        if (b[0] == 0x00 && b[1] == 0x30 && b[2] == 0x00 && b[3] == 0x20) {
-            LOG.info("Pre-screen detected charset UTF-16 (BE) without BOM.");
-            return Optional.of(StandardCharsets.UTF_16BE);
-        }
+        LOG.info("Did not detect charset UTF-16 (without BOM).");
         return Optional.empty();
+    }
+
+    private static Optional<Charset> detectUniversal(final BufferedInputStream gedcomStream, final int cBytesToCheck) throws IOException {
+        gedcomStream.reset();
+
+        LOG.info("Running universal charset detector.");
+        final UniversalDetector detector = new UniversalDetector();
+
+        final int cBufferSize = 4 * 1024;
+        final byte[] buf = new byte[cBufferSize];
+        int sane = cBytesToCheck / cBufferSize;
+        for (int cRead = gedcomStream.read(buf); cRead > 0 && --sane > 0; cRead = gedcomStream.read(buf)) {
+            detector.handleData(buf, 0, cRead);
+        }
+
+        detector.dataEnd();
+
+        return charsetForName(detector.getDetectedCharset());
     }
 
     private static Optional<Charset> charsetForName(String detected) {
@@ -105,10 +131,27 @@ public class HeuristicCharsetDetector {
 
         try {
             LOG.info("Charset detector returned charset name: {}.", detected);
-            return Optional.of(Charset.forName(detected));
+            final Charset charset = Charset.forName(detected);
+            LOG.info("Interpreted charset name: {}, as charset: {}.", detected, charset.name());
+            return Optional.of(charset);
         } catch (final Exception ignore) {
-            LOG.warn("Charset detector returned invalid charset name: {}.", detected, ignore);
+            LOG.warn("Could not interpret charset name: {}.", detected, ignore);
             return Optional.empty();
         }
+    }
+
+    private static Optional<Charset> detectAnsel(final BufferedInputStream gedcomStream, int cBytesToCheck) throws IOException {
+        gedcomStream.reset();
+        LOG.info("Checking for charset ANSEL.");
+        final AnselCharsetDetector anselDetector = new AnselCharsetDetector(2);
+        anselDetector.handleData(gedcomStream, cBytesToCheck);
+        final Optional<Charset> charset;
+        if (anselDetector.detected()) {
+            charset = charsetForName(GedcomAnselCharset.NAME);
+        } else {
+            LOG.info("Did not detect charset ANSEL.");
+            charset = Optional.empty();
+        }
+        return charset;
     }
 }
