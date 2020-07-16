@@ -143,7 +143,7 @@ public class HeuristicCharsetDetector {
     private static Optional<Charset> detectAnsel(final BufferedInputStream gedcomStream, int cBytesToCheck) throws IOException {
         gedcomStream.reset();
         LOG.info("Checking for charset ANSEL.");
-        final AnselCharsetDetector anselDetector = new AnselCharsetDetector(2);
+        final AnselCharsetDetector anselDetector = new AnselCharsetDetector();
         anselDetector.handleData(gedcomStream, cBytesToCheck);
         final Optional<Charset> charset;
         if (anselDetector.detected()) {
