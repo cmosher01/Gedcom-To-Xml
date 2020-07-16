@@ -49,7 +49,7 @@ public class HeuristicCharsetDetector {
 
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeclaredCharsetDetector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HeuristicCharsetDetector.class);
 
     private static Optional<Charset> tryDetect(final BufferedInputStream gedcomStream, final int cBytesToCheck) throws IOException {
         Optional<Charset> charset = Optional.empty();
