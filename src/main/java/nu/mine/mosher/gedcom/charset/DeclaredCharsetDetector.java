@@ -36,7 +36,7 @@ import java.util.regex.*;
  * The input stream's location is marked before reading, and reset afterwards.
  *
  * There is a "catch-22" problem, in that we need to presume some character encoding in order
- * to read the stream to interpret the "CHAR" entry itself. Pass this in a the charsetBestGuess
+ * to read the stream to interpret the "CHAR" entry itself. Pass this in as the charsetBestGuess
  * parameter.
  */
 public class DeclaredCharsetDetector {
@@ -59,21 +59,28 @@ public class DeclaredCharsetDetector {
 
 
     private static Optional<Charset> tryDetect(final BufferedInputStream gedcomStream, final int cBytesToCheck, final Charset charsetBestGuess) throws IOException {
-        final String headChar = interpretHeadChar(tryDetectCharsetNameDeclared(gedcomStream, cBytesToCheck, charsetBestGuess));
-        if (headChar.isEmpty()) {
-            LOG.warn("Did not recognize that value for charset name.");
-            return Optional.empty();
+        final String rawCharSetName = readCharsetNameDeclared(gedcomStream, cBytesToCheck, charsetBestGuess);
+        final String mappedCharSetName = interpretHeadCharSetName(rawCharSetName);
+
+        String useCharSetName;
+        if (mappedCharSetName.isEmpty()) {
+            LOG.warn("Did not recognize declared charset name \"{}\" as GEDCOM or de facto standard.", rawCharSetName);
+            useCharSetName = rawCharSetName;
+        } else {
+            LOG.info("Interpreted declared charset name as: {}.", mappedCharSetName);
+            useCharSetName = mappedCharSetName;
         }
-        LOG.info("Interpreted declared charset name as: {}.", headChar);
+
         try {
-            return Optional.of(Charset.forName(headChar));
-        } catch (final Exception ignore) {
-            LOG.warn("Invalid charset name: {}.", headChar, ignore);
+            return Optional.of(Charset.forName(useCharSetName));
+        } catch (final Exception e) {
+            LOG.warn("Invalid charset name: {}.", useCharSetName, e);
             return Optional.empty();
         }
     }
 
-    private static String tryDetectCharsetNameDeclared(final BufferedInputStream gedcomStream, final int cBytesToCheck, final Charset charsetBestGuess) throws IOException {
+    private static String readCharsetNameDeclared(final BufferedInputStream gedcomStream, final int cBytesToCheck, final Charset charsetBestGuess) throws IOException {
+        // Small finite state machine to find (first) CHAR under (first) HEAD record
         final Pattern HEAD_LINE = Pattern.compile("0\\s+HEAD.*");
         final Pattern CHAR_LINE = Pattern.compile("1\\s+CHAR\\s+(.*)");
         final Pattern REC0_LINE = Pattern.compile("0\\s+.*");
@@ -102,8 +109,8 @@ public class DeclaredCharsetDetector {
                         final Matcher matcher = CHAR_LINE.matcher(line);
                         if (matcher.matches()) {
                             final String charsetNameDeclared = matcher.group(1).trim();
-                            LOG.info("Found CHAR line with value: {}.", charsetNameDeclared);
-                            return charsetNameDeclared.toUpperCase();
+                            LOG.info("Found CHAR line with value: \"{}\".", charsetNameDeclared);
+                            return charsetNameDeclared;
                         }
                     }
                 }
@@ -122,7 +129,7 @@ public class DeclaredCharsetDetector {
         return new BufferedReader(new InputStreamReader(new UnicodeBOMInputStream(gedcomStream), charsetBestGuess));
     }
 
-    private static final Map<String, String> mapChar = ((Supplier<Map<String, String>>)() -> {
+    private static final Map<String, String> MAP_KNOWN_CHAR_SET_NAMES = ((Supplier<Map<String, String>>)() -> {
         final Map<String, String> m = new HashMap<>();
 
         // Tamura Jones, "GEDCOM Character Encodings", Modern Software Experience 2014-08-26
@@ -164,7 +171,9 @@ public class DeclaredCharsetDetector {
         return Collections.unmodifiableMap(m);
     }).get();
 
-    private static String interpretHeadChar(final String headChar) {
-        return Objects.toString(mapChar.get(headChar), "");
+    private static String interpretHeadCharSetName(final String headCharSetName) {
+        // TODO more research to extend this list, possibly with some parsing and smart logic
+        // possibly "massaging" the name to a recognizable standard
+        return Objects.toString(MAP_KNOWN_CHAR_SET_NAMES.get(headCharSetName.toUpperCase()), "");
     }
 }

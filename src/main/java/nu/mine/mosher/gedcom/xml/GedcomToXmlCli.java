@@ -62,6 +62,20 @@ public class GedcomToXmlCli {
         }
     }
 
+    public void charsets(final Optional<String> none) {
+        System.out.println("Known character set names:");
+        for (final Charset c : Charset.availableCharsets().values()) {
+            System.out.print(c.displayName());
+            System.out.print(": ");
+            System.out.print(c.name());
+            for (final String a : c.aliases()) {
+                System.out.print(",");
+                System.out.print(a);
+            }
+            System.out.println();
+        }
+    }
+
     public void verbose(final Optional<String> b) {
         final String level = LogUtil.setLevel(b.orElse("info"));
         LOG.info("Verbose logging, at level: {}", level);
