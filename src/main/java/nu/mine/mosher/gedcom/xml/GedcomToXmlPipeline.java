@@ -21,6 +21,7 @@
 package nu.mine.mosher.gedcom.xml;
 
 import nu.mine.mosher.xml.XsltPipeline;
+import org.mozilla.universalchardet.UnicodeBOMInputStream;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -37,7 +38,8 @@ public class GedcomToXmlPipeline {
         final BufferedReader in =
             new BufferedReader(
                 new InputStreamReader(
-                    new FileInputStream(Objects.requireNonNull(fileIn)),
+                    new UnicodeBOMInputStream(
+                        new FileInputStream(Objects.requireNonNull(fileIn))),
                     Objects.requireNonNull(charsetIn)));
 
 
