@@ -2,7 +2,7 @@ plugins {
     id 'org.beryx.runtime' version '1.12.7'
 }
 
-version = '2.0.0'
+version = '2.0.1'
 
 group = 'nu.mine.mosher.gedcom.xml'
 
