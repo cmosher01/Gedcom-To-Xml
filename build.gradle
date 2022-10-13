@@ -1,7 +1,46 @@
-def inc(module) {
-    apply from: "${projectDir}/gradle/${module}.gradle"
+plugins {
+    id 'org.beryx.runtime' version '1.12.7'
 }
 
-inc('version')
-inc('project')
-inc('dependencies')
+version = '2.0.0'
+
+group = 'nu.mine.mosher.gedcom.xml'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri('https://public:\u0067hp_fya6Kseu3XOBMg2icbg7f1LP6ZFYjj35v4Zj@maven.pkg.github.com/cmosher01/*')
+    }
+}
+
+dependencies {
+    implementation group: 'nu.mine.mosher.xml', name: 'xslt-pipeline', version: 'latest.release'
+    implementation group: 'nu.mine.mosher.gnopt', name: 'gnopt', version: 'latest.release'
+    implementation group: 'nu.mine.mosher.gedcom', name: 'ansel', version: 'latest.release'
+    implementation group: 'com.github.albfernandez', name: 'juniversalchardet', version: 'latest.release'
+
+    implementation group: 'org.xmlresolver', name: 'xmlresolver', version: 'latest.release', classifier: 'data'
+
+    // logging
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: 'latest.release'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: 'latest.release'
+    implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: 'latest.integration'
+    runtimeOnly group: 'org.slf4j', name: 'log4j-over-slf4j', version: 'latest.release'
+    runtimeOnly group: 'org.slf4j', name: 'jcl-over-slf4j', version: 'latest.release'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of 17
+    }
+}
+
+application {
+    mainClass = 'nu.mine.mosher.gedcom.xml.GedcomToXml'
+}
+
+runtime {
+    modules = [ 'java.xml', 'java.logging' ]
+}
+
+tasks.assemble.dependsOn tasks.jpackage

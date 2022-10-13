@@ -25,12 +25,15 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
     xmlns:gedcom="https://mosher.mine.nu/xmlns/gedcom"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/XMLSchema https://www.w3.org/2001/XMLSchema.xsd"
     targetNamespace="https://mosher.mine.nu/xmlns/gedcom"
     elementFormDefault="qualified"
     attributeFormDefault="qualified"
 >
-    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../www.w3.org/xml.xsd"/>
-    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="../www.w3.org/xlink.xsd"/>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="https://mosher.mine.nu/xml/xsd/xml.xsd"/>
+    <xs:import namespace="http://www.w3.org/2001/XMLSchema" schemaLocation="http://www.w3.org/2001/XMLSchema.xsd"/>
+    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="https://mosher.mine.nu/xml/xsd/xlink.xsd"/>
     <xs:import namespace="https://mosher.mine.nu/xmlns/hier" schemaLocation="hier.xsd"/>
 
 

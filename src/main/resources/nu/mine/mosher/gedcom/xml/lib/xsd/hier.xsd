@@ -23,6 +23,8 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:lines="https://mosher.mine.nu/xmlns/lines"
     xmlns:hier="https://mosher.mine.nu/xmlns/hier"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/XMLSchema https://www.w3.org/2001/XMLSchema.xsd"
     targetNamespace="https://mosher.mine.nu/xmlns/hier"
     elementFormDefault="qualified"
     attributeFormDefault="qualified"
