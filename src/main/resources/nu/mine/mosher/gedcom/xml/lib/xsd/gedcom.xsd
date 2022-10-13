@@ -31,9 +31,9 @@
     elementFormDefault="qualified"
     attributeFormDefault="qualified"
 >
-    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="https://mosher.mine.nu/xml/xsd/xml.xsd"/>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
     <xs:import namespace="http://www.w3.org/2001/XMLSchema" schemaLocation="http://www.w3.org/2001/XMLSchema.xsd"/>
-    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="https://mosher.mine.nu/xml/xsd/xlink.xsd"/>
+    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
     <xs:import namespace="https://mosher.mine.nu/xmlns/hier" schemaLocation="hier.xsd"/>
 
 
