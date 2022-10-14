@@ -15,37 +15,29 @@ to parse or understand GEDCOM tags. It robustly handles the follow GEDCOM featur
 * values (become their own `value` elements)
 * cross-references (IDs become `xml:id` and pointers become `xlink:href`)
 * `@@` becomes `@`
-* `CONC` and `CONT` lines
-
----
-## Run
-
-Requires Java SE 11 or greater.
-
-```sh
-/path/to/gedcom-to-xml "My Family Tree.ged"
-```
-
-creates corresponding `My Family Tree.xml` output file.
+* `CONC` and `CONT` lines are concatenated appropriately
 
 This program is safe to run; no existing files will be modified, overwritten, or deleted.
 If the corresponding XML output file already exists,
 then a new unique filename (with a timestamp) will be created instead.
 
-For usage information:
-```sh
-/path/to/gedcom-to-xml --help
-```
-
 ---
-## Tutorial
+## quick start (Ubuntu)
 
-Install:
+Download the latest DEB package from
+https://github.com/cmosher01/Gedcom-To-Xml/releases/latest ,
+and then install it:
+
 ```sh
-$ tar xf gedcom-to-xml-1.0.0.tar
+$ sudo dpkg -i ~/Downloads/gedcom-to-xml_VERSION-1_amd64.deb
+Selecting previously unselected package gedcom-to-xml.
+(Reading database ... 974904 files and directories currently installed.)
+Preparing to unpack .../gedcom-to-xml_2.0.1-1_amd64.deb ...
+Unpacking gedcom-to-xml (2.0.1-1) ...
+Setting up gedcom-to-xml (2.0.1-1) ...
 ```
 
-Create test GEDCOM file:
+Create a small GEDCOM file:
 ```sh
 $ cat - >minimal.ged
 0 HEAD
@@ -55,14 +47,14 @@ $ cat - >minimal.ged
 1 NAME Chris /Mosher/
 1 EMAIL cmosher01@@gmail.com
 2 NOTE Note:
-3 CONT This is a minimal ex
+3 CONT This is a small ex
 3 CONC ample GEDCOM file.
 0 TRLR
 ```
 
 Run it through Gedcom-To-Xml:
 ```sh
-$ ./gedcom-to-xml-1.0.0/bin/gedcom-to-xml minimal.ged
+$ /opt/gedcom-to-xml/bin/gedcom-to-xml minimal.ged
 ```
 
 See the resuting XML output file:
@@ -88,7 +80,7 @@ $ cat minimal.xml
          <gedcom:value>cmosher01@gmail.com</gedcom:value>
          <gedcom:node gedcom:tag="NOTE">
             <gedcom:value>Note:
-This is a minimal example GEDCOM file.</gedcom:value>
+This is a small example GEDCOM file.</gedcom:value>
          </gedcom:node>
       </gedcom:node>
    </gedcom:node>
@@ -99,26 +91,44 @@ This is a minimal example GEDCOM file.</gedcom:value>
 ```
 
 
-## Implementation
+
+## XML schema
+
+Three XML namespaces, with associated schema, are defined.
+Schema definition files are available at the namespace URLs.
+
+`https://mosher.mine.nu/xmlns/gedcom`
+
+This is the primary GEDCOM schema, defining `node`
+and `value` elements, and the `tag` attribute.
+
+`https://mosher.mine.nu/xmlns/hier`
+
+This is an intermediate schema describing an XML file
+that represents a generic hierarchy of nodes.
+
+`https://mosher.mine.nu/xmlns/lines`
+
+This is a very generic schema describing an XML file
+that represents a simple series of lines.
+
+
+
+## implementation
 Gedcom-To-Xml is implemented as a pipeline that converts the GEDCOM file using
 a series of XSL transformations. Each step transforms one aspect of the GEDCOM
 data and verifies the output against an XML schema.
 
-## Development
-Build using JDK 11 or greater.
+## development
+Build using JDK 17 or greater.
 Depends on Xerces and Saxon-HE (latest versions).
-
-Quick start:
 
 ```sh
 $ java -version
-openjdk version "11.0.5" 2019-10-15 LTS
-OpenJDK Runtime Environment Corretto-11.0.5.10.1 (build 11.0.5+10-LTS)
-OpenJDK 64-Bit Server VM Corretto-11.0.5.10.1 (build 11.0.5+10-LTS, mixed mode)
+openjdk version "17.0.4" 2022-07-19
+OpenJDK Runtime Environment (build 17.0.4+8-Ubuntu-122.04)
+OpenJDK 64-Bit Server VM (build 17.0.4+8-Ubuntu-122.04, mixed mode, sharing)
 $ git clone https://github.com/cmosher01/Gedcom-To-Xml.git
 $ cd Gedcom-To-Xml
 $ ./gradlew build
-$ tar xf build/distributions/gedcom-to-xml-1.0.0.tar
-$ ./gedcom-to-xml-1.0.0/bin/gedcom-to-xml examples/minimal.ged
-$ cat examples/minimal.xml
 ```
